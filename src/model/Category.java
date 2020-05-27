@@ -10,9 +10,9 @@ public class Category {
 		
 	}
 	
-	public Category(String categoryName, Color colour) {
+	public Category(String categoryName, String colour) {
 		this.categoryName = categoryName;
-		this.colour = colour;
+		this.colour = Color.getColour(colour);
 	}
 	
 	public int getCategoryId() {
