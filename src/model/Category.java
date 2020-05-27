@@ -4,13 +4,13 @@ public class Category {
 
 	private int categoryId;
 	private String categoryName;
-	private String colour;
+	private Color colour;
 	
 	public Category() {
 		
 	}
 	
-	public Category(String categoryName, String colour) {
+	public Category(String categoryName, Color colour) {
 		this.categoryName = categoryName;
 		this.colour = colour;
 	}
@@ -23,7 +23,7 @@ public class Category {
 		return categoryName;
 	}
 	
-	public String getColour() {
+	public Color getColour() {
 		return colour;
 	}
 	
@@ -35,7 +35,7 @@ public class Category {
 		this.categoryName = categoryName;
 	}
 	
-	public void setColour(String colour) {
+	public void setColour(Color colour) {
 		this.colour = colour;
 	}
 	
