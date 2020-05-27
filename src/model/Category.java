@@ -12,7 +12,21 @@ public class Category {
 	
 	public Category(String categoryName, String colour) {
 		this.categoryName = categoryName;
-		this.colour = Color.getColour(colour);
+		switch(colour) {
+        case "black":
+            this.colour = Color.BLACK;
+        case "green":
+        	this.colour = Color.GREEN;
+        case "red":
+        	this.colour = Color.RED;
+        case "pink":
+        	this.colour = Color.PINK;
+        case "blue":
+        	this.colour = Color.BLUE;
+        case "yellow":
+        	this.colour = Color.YELLOW;   
+    }
+
 	}
 	
 	public int getCategoryId() {
