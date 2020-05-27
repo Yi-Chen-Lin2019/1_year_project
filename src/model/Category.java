@@ -4,7 +4,7 @@ public class Category {
 
 	private int categoryId;
 	private String categoryName;
-	private String colour;
+	private Color colour;
 	
 	public Category() {
 		
