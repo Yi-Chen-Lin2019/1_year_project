@@ -36,35 +36,16 @@ public class Statistics {
 			
 			//sort by bike sale price
 			Comparator<Bike> bikeSalePriceComparator = (b1, b2)->(
-					b1.getSalePrice() -b2.getSalePrice() > 0 ? 1 : 
-						(b1.getSalePrice()-b2.getSalePrice() == 0 ? 0 : -1) );
+					b1.getFinalPrice() -b2.getFinalPrice() > 0 ? 1 : 
+						(b1.getFinalPrice()-b2.getFinalPrice() == 0 ? 0 : -1) );
 			bikes.sort(bikeSalePriceComparator.reversed()); //high to low
 			bikes.sort(bikeSalePriceComparator); //low to high
 
 			//sort by bike name
 			
-			//sort by register date
+			//sort by date
 			bikeSold.sort((Bike b1, Bike b2)->b1.getRegisterDate().compareTo(b2.getRegisterDate()));
-			
-			//sort by soldDate
-			bikeSold.sort((Bike b1, Bike b2)->b1.getSoldDate().compareTo(b2.getSoldDate()));
-
-			//avg price of female/ male/ uni
-			int male = 0;
-			int female = 0;
-			int uni = 0;
-			for(Bike b: bikes) {
-				if(b.getGender()=="M") {
-					male++;
-				} else {
-					if(b.getGender()=="F") {
-						female++;
-					} else {
-						uni++;
-					}
-				}
-			}
-				
+			bikeSold.forEach((bike)->System.out.println(bike.getBikeName()+" "+bike.getSoldDate()));
 			
 			
 		
@@ -101,9 +82,5 @@ public class Statistics {
 		
 		return result;
 	
-	}
-	
-
-	
-	
+}
 }

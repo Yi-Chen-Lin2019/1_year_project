@@ -12,16 +12,19 @@ import model.RepairItem;
 
 public class RepairItemDB implements RepairItemDBIF {
 	Connection connection;
-	private static String FIND_ALL_Q = "Select RepairItemId, RepairItemName, CategoryId from RepairItem";
-	private static String FIND_BY_ID_Q = FIND_ALL_Q + " where RepairItemId = ?";
-	private static String FIND_BY_GEARTYPE = FIND_ALL_Q + " where CategoryId != ?";
+	private static String FIND_ALL = "Select RepairItemId, RepairItemName, CategoryId from RepairItem";
+	private static String FIND_ALL_Q = "Select RepairItemId, RepairItemName, CategoryId from RepairItem where IsDisabled = 0";
+	private static String FIND_BY_ID_Q = FIND_ALL + " where RepairItemId = ? and IsDisabled = 0";
+	private static String FIND_BY_GEARTYPE = FIND_ALL + " where CategoryId != ? and IsDisabled = 0";
 	private static String INSERT_Q = "INSERT INTO RepairItem (RepairItemName, CategoryId) values (?, ?)";
 	private static String UPDATE_Q = "Update RepairItem SET RepairItemName = ?, CategoryId = ? WHERE RepairItemId = ?";
+	private static String DELETE_Q = "Update RepairItem SET IsDisabled = 1 where RepairItemId = ?";
 	private PreparedStatement findAll;
 	private PreparedStatement findById;
 	private PreparedStatement findByGearTypePS;
 	private PreparedStatement insertPS;
 	private PreparedStatement updatePS;
+	private PreparedStatement deletePS;
 
 	
 	public RepairItemDB() {
@@ -41,6 +44,7 @@ public class RepairItemDB implements RepairItemDBIF {
 			findByGearTypePS = connection.prepareStatement(FIND_BY_GEARTYPE);
 			insertPS = connection.prepareStatement(INSERT_Q, Statement.RETURN_GENERATED_KEYS);
 			updatePS = connection.prepareStatement(UPDATE_Q);
+			deletePS = connection.prepareStatement(DELETE_Q);
 
 		} catch (SQLException e) {
 			// e.printStackTrace();
@@ -125,8 +129,23 @@ public class RepairItemDB implements RepairItemDBIF {
 
 	@Override
 	public boolean deleteRepairItem(RepairItem repairItem) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return false;
+		boolean success = false;
+		try {
+			deletePS.setInt(1, repairItem.getRepairItemId());
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new DataAccessException(DBMessages.COULD_NOT_BIND_PS_VARS_INSERT, e);
+		}
+		try {
+			int temp = deletePS.executeUpdate();
+			if (temp > 0) {
+				success = true;
+			}
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new DataAccessException(DBMessages.COULD_NOT_INSERT, e);
+		}
+		return success;
 	}
 
 	private RepairItem buildObject(ResultSet rs) throws DataAccessException {

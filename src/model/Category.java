@@ -38,4 +38,19 @@ public class Category {
 	public void setColour(String colour) {
 		this.colour = colour;
 	}
+	
+    public boolean equals(Category category) {
+
+         if (this.getCategoryId() == category.getCategoryId()) {
+        	 return true;
+        }
+
+        return false;
+
+    }
+    
+    @Override
+    public String toString() {
+    	return getCategoryName();
+    }
 }

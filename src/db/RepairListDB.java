@@ -20,10 +20,12 @@ public class RepairListDB implements RepairListDBIF{
 	private static String FIND_BY_ID_Q = FIND_ALL_Q + " WHERE RepairListId = ?";
 	private static String INSERT_Q = "INSERT INTO RepairList (isFinished) values (0)";
 	private static String UPDATE_Q = "Update RepairList SET Note = ?, isFinished = ? WHERE RepairListId = ?";
+	private static String DELETE_Q = "Delete from RepairList WHERE RepairListId = ?";
 	private PreparedStatement findAll;
 	private PreparedStatement findById;
 	private PreparedStatement insertPS;
 	private PreparedStatement updatePS;
+	private PreparedStatement deletePS;
 
 	
 	public RepairListDB() {
@@ -40,8 +42,8 @@ public class RepairListDB implements RepairListDBIF{
 			connection = DBConnection.getInstance().getConnection();
 			findAll = connection.prepareStatement(FIND_ALL_Q);
 			findById = connection.prepareStatement(FIND_BY_ID_Q);
-			
-			
+			updatePS = connection.prepareStatement(UPDATE_Q);
+			deletePS = connection.prepareStatement(DELETE_Q);
 			insertPS = connection.prepareStatement(INSERT_Q, Statement.RETURN_GENERATED_KEYS);
 
 		} catch (SQLException e) {
@@ -132,7 +134,16 @@ public class RepairListDB implements RepairListDBIF{
 
 	@Override
 	public boolean deleteRepairList(RepairList repairList) throws DataAccessException {
-		// TODO Auto-generated method stub
+		try {
+			deletePS.setInt(1, repairList.getId());
+			int i = deletePS.executeUpdate();
+			if (i > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new DataAccessException(DBMessages.COULD_NOT_BIND_OR_EXECUTE_QUERY, e);
+		}
 		return false;
 	}
 
