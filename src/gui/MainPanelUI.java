@@ -203,7 +203,12 @@ public class MainPanelUI {
 				bc2.setMode(1);
 				bc2.startRunning();
 				bc2.setCurrentFrame(0);
-				UpdateBikeUI test = new UpdateBikeUI(frame, contentPanel, screenWidth, screenHeight);
+				try {
+					UpdateBikeUI test = new UpdateBikeUI(frame, contentPanel, screenWidth, screenHeight);
+				} catch (DataAccessException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		mainNav.add(updateBikeBtnHitBox);

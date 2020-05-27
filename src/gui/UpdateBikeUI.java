@@ -15,9 +15,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -41,31 +43,40 @@ public class UpdateBikeUI {
 	JPanel contentPanel;
 	ImageGen checkBoxImage;
 	
-	HashSet<Category> categories = new HashSet<>();	
+	ArrayList<Category> categories = new ArrayList<>();
+	
 	int[] checkBox1Option = {0, 0, 0};
 	ArrayList<Integer> checkBoxRepairItems;
 	
 	JList<Part> availablePartsJList, usedPartsJList;
 	JScrollPane availablePartsListScroll, usedPartsListScroll;
 	ArrayList<Part> availablePartsList, usedPartsList;
-	BikeCtr bikeCtr = new BikeCtr();
+	Bike bike;
+	
 
 	
 	public UpdateBikeUI(JFrame frame, JPanel contentPanel, double screenWidth, double screenHeight) throws DataAccessException {
+		BikeCtr bikeCtr = new BikeCtr();
+		bike = bikeCtr.findBikeByID(17);
 		this.frame = frame;
 		this.contentPanel = contentPanel;
 		contentPanel.removeAll();
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 		
-		//TODO: THIS PART HAS TO BE CHANGED, if according to plan, bike is passed to the UpdateBikeUI directly
-		Bike bike = bikeCtr.findBikeByID(7);
-		//
-		
-		
 		for (Repair repair : bike.getRepairList().getAllRepairs()) {
-			categories.add(repair.getRepairItem().getCategory());
+			boolean exists = false;
+			for (Category category : categories) {
+				if (category.getCategoryId() == repair.getRepairItem().getCategory().getCategoryId()) {
+					exists = true;
+				}
+			}
+			if (!exists) {
+				categories.add(repair.getRepairItem().getCategory());
+			}
 		}
+		
+		checkBoxRepairItems = new ArrayList<>();
 		
 		initializeImages();
 		initialize();
@@ -74,7 +85,7 @@ public class UpdateBikeUI {
 	
 	
 	private void initializeImages() {
-		checkBoxImage = new ImageGen(4, 1, "/checkBox.png", (int) Math.ceil(screenWidth*0.01302), (int) Math.ceil(screenWidth*0.01302));
+		checkBoxImage = new ImageGen(4, 1, "res/checkBox.png", (int) Math.ceil(screenWidth*0.01302), (int) Math.ceil(screenWidth*0.01302));
 	}
 	
 	private void initialize() {
@@ -285,12 +296,23 @@ public class UpdateBikeUI {
 			int it3 = 0;
 			int tempHeight = 0;
 			ArrayList<JLabel> repairItemLabels = new ArrayList<>();
-			for(RepairItem ri : categories.get(it2).getRepairItems()) {
+			
+			
+			//for each repair that belongs to the category
+			List<Repair> categorysRepairs = new ArrayList<Repair>();
+			for (Repair repair : bike.getRepairList().getAllRepairs()) {
+				if (repair.getRepairItem().getCategory().getCategoryId() == categories.get(it2).getCategoryId()) {
+					categorysRepairs.add(repair);
+				}
+			}
+			
+			
+			for(Repair repair: categorysRepairs) {
 				int checkBoxChoice = 0;
 				checkBoxRepairItems.add(checkBoxChoice);
 				JLabel temp2 = new JLabel();
 				final int it4Fin = it4;
-				JLabel temp = new JLabel("   "+ri.getName());
+				JLabel temp = new JLabel("   "+ repair.getRepairItem().getName());
 				temp.setForeground(Color.BLACK);
 				temp.setBackground(new Color(200,200,200,255));
 				temp.setOpaque(true);
@@ -326,6 +348,15 @@ public class UpdateBikeUI {
 						checkBoxRepairItems.set(it4Fin, (checkBoxRepairItems.get(it4Fin)+1));
 						if(checkBoxRepairItems.get(it4Fin)==4) {checkBoxRepairItems.set(it4Fin, 0);}
 						temp2.setIcon(new ImageIcon(checkBoxImage.getFrameArray().get(checkBoxRepairItems.get(it4Fin))));
+						//SET SOMETHING HERE
+						ArrayList<Repair> bikesRepairs = bike.getRepairList().getAllRepairs();
+						for (Repair bikesRepair : bike.getRepairList().getAllRepairs()) {
+							if (bikesRepair.getId() == repair.getId()) {
+								
+							}
+						}
+
+						
 					}
 				});
 				temp2.setHorizontalAlignment(JLabel.CENTER);
@@ -452,8 +483,7 @@ public class UpdateBikeUI {
 		usedPartsText.setBounds((int) Math.ceil(screenWidth*0.11770), (int) Math.ceil(screenHeight*0.61574), (int) Math.ceil(screenWidth*0.07031), (int) Math.ceil(screenHeight*0.02314));
 		rightPanel.add(usedPartsText);
         
-
-        //Save and Cancel Button
+        //Accept and Cancel Button
 		JLabel acceptBtn = new JLabel("Save");	
 		acceptBtn.setForeground(Color.WHITE);
 		acceptBtn.setBackground(new Color(64, 64, 64, 255));
@@ -473,28 +503,7 @@ public class UpdateBikeUI {
 			public void mouseExited(MouseEvent e) {
 				acceptBtn.setBackground(new Color(64,64,64,255));
 			}
-		
-		
 		});
-		acceptBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				
-				
-//				Bike bike = new Bike(serialNumber, gender, bikeName, isExternalGear)
-//				bikeCtr.updateBike(bike);		
-				//navigate somewhere
-				//
-			}
-
-			private String getGender() {
-				String gender = "";
-				//logic to get the gender
-				
-				return gender;
-			}
-		});
-		
 		rightPanel.add(acceptBtn);
 		
 		JLabel cancelBtn = new JLabel("Cancel");	
@@ -517,15 +526,11 @@ public class UpdateBikeUI {
 				cancelBtn.setBackground(new Color(64,64,64,255));
 			}
 		});
-		acceptBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				//navigate somewhere
-				//
-			}
-
-		});
 		rightPanel.add(cancelBtn);
 	}
+	
+	public boolean equals(Category c) {
+	      return (Category)o.get()).equals(this.getName());
+	  }
 	
 }

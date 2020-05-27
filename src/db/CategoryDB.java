@@ -5,23 +5,27 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Bike;
 import model.Category;
+import model.RepairItem;
 import model.RepairList;
 
 public class CategoryDB implements CategoryDBIF {
 	private Connection connection;
-	private static String FIND_ALL_Q = "Select CategoryId, CategoryName, Color from Category";
-	private static String FIND_BY_ID_Q = FIND_ALL_Q + " where CategoryId = ?";
+	private static String FIND_ALL_Q = "Select CategoryId, CategoryName, Color from Category where isDisabled = 0";
+	private static String FIND_BY_ID_Q = "Select CategoryId, CategoryName, Color from Category where CategoryId = ? and IsDisabled = 0";
 	private static String INSERT_Q = "INSERT INTO Category (CategoryName, Color) values (?, ?)";
 	private static String UPDATE_Q = "Update Category SET CategoryName = ?, Color = ? WHERE CategoryId = ?";
+	private static String DELETE_Q = "Update Category SET IsDisabled = 1 WHERE CategoryId = ?";
 
 	private PreparedStatement findAll;
 	private PreparedStatement findById;
 	private PreparedStatement insertPS;
 	private PreparedStatement updatePS;
+	private PreparedStatement deletePS;
 	
 	public CategoryDB() {
 		try {
@@ -39,6 +43,7 @@ public class CategoryDB implements CategoryDBIF {
 			findById = connection.prepareStatement(FIND_BY_ID_Q);
 			insertPS = connection.prepareStatement(INSERT_Q, Statement.RETURN_GENERATED_KEYS);
 			updatePS = connection.prepareStatement(UPDATE_Q);
+			deletePS = connection.prepareStatement(DELETE_Q);
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_PREPARE_STATEMENT, e);
@@ -47,8 +52,16 @@ public class CategoryDB implements CategoryDBIF {
 	
 	@Override
 	public List<Category> findAll() throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Category> res = new ArrayList<>(0);
+
+		try {
+			ResultSet rs = this.findAll.executeQuery();
+			res = buildObjects(rs);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new DataAccessException(DBMessages.COULD_NOT_READ_RESULTSET, e);
+		}
+		return res;
 	}
 
 	@Override
@@ -88,8 +101,24 @@ public class CategoryDB implements CategoryDBIF {
 
 	@Override
 	public boolean deleteCategory(Category category) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return false;
+				boolean success = false;
+
+				try {
+					deletePS.setInt(1, category.getCategoryId());
+				} catch (SQLException e) {
+					// e.printStackTrace();
+					throw new DataAccessException(DBMessages.COULD_NOT_BIND_PS_VARS_INSERT, e);
+				}
+				try {
+					int temp = deletePS.executeUpdate();
+					if (temp > 0) {
+						success = true;
+					}
+				} catch (SQLException e) {
+					// e.printStackTrace();
+					throw new DataAccessException(DBMessages.COULD_NOT_INSERT, e);
+				}
+				return success;
 	}
 
 	@Override
@@ -125,6 +154,20 @@ public class CategoryDB implements CategoryDBIF {
 			res.setCategoryName(rs.getString("CategoryName"));
 			res.setColour(rs.getString("Color"));
 
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new DataAccessException(DBMessages.COULD_NOT_READ_RESULTSET, e);
+		}
+		return res;
+	}
+	
+	private List<Category> buildObjects(ResultSet rs) throws DataAccessException{
+		List<Category> res = new ArrayList<>();
+		try {
+			while (rs.next()) {
+				Category currCat = buildObject(rs);
+				res.add(currCat);
+			}
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_READ_RESULTSET, e);

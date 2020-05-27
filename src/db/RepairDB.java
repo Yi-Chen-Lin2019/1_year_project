@@ -14,18 +14,19 @@ import model.Repair;
 import model.StatusEnum;
 
 public class RepairDB implements RepairDBIF {
-
 	private static String FIND_ALL_Q = "Select RepairId, RepairStatus, RepairItemId, RepairListId from Repair ";
 	private static String FIND_BY_ID_Q = FIND_ALL_Q + " where RepairId = ?";
 	private static String FIND_BY_REPAIR_LIST_ID_Q = FIND_ALL_Q + " where RepairListId = ?";
 	private static String INSERT_Q = "INSERT INTO Repair (RepairStatus, RepairItemId, RepairListId) values (?, ?, ?)";
 	private static String UPDATE_Q = "Update Repair SET RepairStatus = ? WHERE RepairId = ?";
+	private static String DELETE_Q = "Delete from Repair WHERE RepairId = ?";
 
 	private PreparedStatement findAll;
 	private PreparedStatement findAllByRepairListId;
 	private PreparedStatement findById;
 	private PreparedStatement insertPS;
 	private PreparedStatement updatePS;
+	private PreparedStatement deletePS;
 	
 	public RepairDB() {
 		try {
@@ -44,6 +45,7 @@ public class RepairDB implements RepairDBIF {
 			findAllByRepairListId = connection.prepareStatement(FIND_BY_REPAIR_LIST_ID_Q);
 			insertPS = connection.prepareStatement(INSERT_Q, Statement.RETURN_GENERATED_KEYS);
 			updatePS = connection.prepareStatement(UPDATE_Q);
+			deletePS = connection.prepareStatement(DELETE_Q);
 
 		} catch (SQLException e) {
 			// e.printStackTrace();
@@ -144,7 +146,16 @@ public class RepairDB implements RepairDBIF {
 
 	@Override
 	public boolean deleteRepair(Repair repair) throws DataAccessException {
-		// TODO Auto-generated method stub
+		try {
+			deletePS.setInt(1, repair.getId());
+			int i = deletePS.executeUpdate();
+			if (i > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new DataAccessException(DBMessages.COULD_NOT_BIND_OR_EXECUTE_QUERY, e);
+		}
 		return false;
 	}
 
