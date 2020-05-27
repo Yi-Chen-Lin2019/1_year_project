@@ -246,7 +246,7 @@ public class RegisterBikeUI {
 			public void mouseReleased(MouseEvent e) {
 				String gender="";
 				for(int i = 0; i<3; i++) {
-					if(checkBoxGenders[i]==1) {if(i==0) {gender="male";} if(i==1) {gender ="female";} if(i==2) {gender = "unisex";}}
+					if(checkBoxGenders[i]==1) {if(i==0) {gender="M";} if(i==1) {gender ="F";} if(i==2) {gender = "U";}}
 				}
 					boolean isExternalGear=false;
 					if(checkBoxGears[0]==1) {isExternalGear=true;}
