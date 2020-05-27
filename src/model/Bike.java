@@ -126,18 +126,13 @@ public class Bike {
 	}
 	
 	public void addUsedPart(UsedPart usedPart) {
-		usedParts.add(usedPart);
-	}
-
-	public void updateTotalPartPrice() {
-		totalPartPrice = 0;
-		for(UsedPart part : usedParts) {
-			if(part.getIsNew()) {
-				totalPartPrice+=part.getPart().getNewPrice();
-			} else {
-				totalPartPrice+=part.getPart().getUsedPrice();
-			}
+		//check isNew
+		if(usedPart.getIsNew()) {
+			totalPartPrice += usedPart.getPart().getNewPrice();
+		} else {
+			totalPartPrice += usedPart.getPart().getUsedPrice();
 		}
+		usedParts.add(usedPart);
 	}
 }
 

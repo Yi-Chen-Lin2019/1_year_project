@@ -22,7 +22,7 @@ class TestUpdateRepairProcess {
 		try {
 			//Arrange
 			BikeCtr bikeCtr = new BikeCtr();
-			Bike bike = bikeCtr.findBikeByID(9);
+			Bike bike = bikeCtr.findBikeByID(10);
 			
 			//Act
 			RepairList rList = bike.getRepairList();
