@@ -24,7 +24,7 @@ public class CellRenderer {
         return cellRenderer;
     }
 	
-	
+
 	public class PartCellRenderer implements ListCellRenderer<Part> {
 
 		private DefaultListCellRenderer dlcr;

@@ -80,6 +80,7 @@ public class MainPanelUI {
         frame.setVisible(true);
 	}
 	
+	
 	private void initialize() {
 		JPanel mainNav = new JPanel();
 		mainNav.setLayout(null);

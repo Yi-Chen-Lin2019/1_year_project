@@ -43,6 +43,7 @@ public class RegisterBikeUI {
 		try {bikeCtr = new BikeCtr();}
 		catch(DataAccessException e) {}
 		
+		
 		initialize();
 		frame.repaint();
 	}

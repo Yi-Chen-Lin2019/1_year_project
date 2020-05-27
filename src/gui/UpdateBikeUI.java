@@ -56,6 +56,7 @@ public class UpdateBikeUI {
 	int[] checkBoxGenders = { 0, 0, 0 };
 	ArrayList<Integer> checkBoxRepair;
 
+	
 	//Part Cell Renderers
 	private PartCtr partCtr = new PartCtr();
 	private CellRenderer cellRenderers = CellRenderer.getInstance();
