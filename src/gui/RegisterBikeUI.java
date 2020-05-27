@@ -38,7 +38,7 @@ public class RegisterBikeUI {
 		contentPanel.removeAll();
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
-		checkBoxImage = new ImageGen(4, 1, "/checkBox.png", (int) Math.ceil(screenWidth * 0.01302),(int) Math.ceil(screenWidth * 0.01302));
+		checkBoxImage = new ImageGen(4, 1, "res/checkBox.png", (int) Math.ceil(screenWidth * 0.01302),(int) Math.ceil(screenWidth * 0.01302));
 		
 		try {bikeCtr = new BikeCtr();}
 		catch(DataAccessException e) {}
