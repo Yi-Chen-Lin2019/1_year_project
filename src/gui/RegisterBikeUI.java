@@ -38,7 +38,7 @@ public class RegisterBikeUI {
 		contentPanel.removeAll();
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
-		checkBoxImage = new ImageGen(4, 1, "/checkBox.png", (int) Math.ceil(screenWidth * 0.01302),(int) Math.ceil(screenWidth * 0.01302));
+		checkBoxImage = new ImageGen(4, 1, "res/checkBox.png", (int) Math.ceil(screenWidth * 0.01302),(int) Math.ceil(screenWidth * 0.01302));
 		
 		try {bikeCtr = new BikeCtr();}
 		catch(DataAccessException e) {}
@@ -246,7 +246,7 @@ public class RegisterBikeUI {
 			public void mouseReleased(MouseEvent e) {
 				String gender="";
 				for(int i = 0; i<3; i++) {
-					if(checkBoxGenders[i]==1) {if(i==0) {gender="male";} if(i==1) {gender ="female";} if(i==2) {gender = "unisex";}}
+					if(checkBoxGenders[i]==1) {if(i==0) {gender="M";} if(i==1) {gender ="F";} if(i==2) {gender = "U";}}
 				}
 					boolean isExternalGear=false;
 					if(checkBoxGears[0]==1) {isExternalGear=true;}
