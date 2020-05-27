@@ -51,16 +51,13 @@ public class UpdateBikeUI {
 	BikeCtr bikeCtr = new BikeCtr();
 
 	
-	public UpdateBikeUI(JFrame frame, JPanel contentPanel, double screenWidth, double screenHeight) throws DataAccessException {
+	public UpdateBikeUI(JFrame frame, JPanel contentPanel, double screenWidth, double screenHeight, Bike bike) throws DataAccessException {
 		this.frame = frame;
 		this.contentPanel = contentPanel;
 		contentPanel.removeAll();
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
-		
-		//TODO: THIS PART HAS TO BE CHANGED, if according to plan, bike is passed to the UpdateBikeUI directly
-		Bike bike = bikeCtr.findBikeByID(7);
-		//
+		this.bike = bike;
 		
 		
 		for (Repair repair : bike.getRepairList().getAllRepairs()) {
