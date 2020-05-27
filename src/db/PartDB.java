@@ -41,7 +41,7 @@ public class PartDB implements PartDBIF {
 		try {
 			findAll = connection.prepareStatement(FIND_ALL_Q);
 			findById = connection.prepareStatement(FIND_BY_ID_Q);
-			findByName = connection.prepareStatement(FIND_BY_ID_Q);
+			findByName = connection.prepareStatement(FIND_BY_NAME_Q);
 			insertPS = connection.prepareStatement(INSERT_Q, Statement.RETURN_GENERATED_KEYS);
 			updatePS = connection.prepareStatement(UPDATE_Q);
 			deletePS = connection.prepareStatement(DELETE_Q);

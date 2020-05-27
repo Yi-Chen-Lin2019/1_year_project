@@ -46,7 +46,7 @@ class TestUpdateBike {
 			
 			
 			//Act
-			Bike bike = bikeCtr.findBikeByID(6);
+			Bike bike = bikeCtr.findBikeByID(5);
 			UsedPart usedPart = new UsedPart(true, new Part());
 			usedPart = new UsedPartCtr().insertUsedPart(usedPart, bike.getId());
 			bike.addUsedPart(usedPart);

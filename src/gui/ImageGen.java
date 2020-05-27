@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -20,7 +21,6 @@ public class ImageGen {
 	private String path;
 	
 	
-	
 	/*imgWidth/imgHeight = Image 4x4 imgWidth = width/2    path - image resource path	*/
 	public ImageGen(int xFrameNum, int yFrameNum, String path, int widthSize, int heightSize){
 		this.xFrameNum = xFrameNum;
@@ -31,7 +31,7 @@ public class ImageGen {
 		
 		tempImg = null;
 		
-		try{tempImg = ImageIO.read(this.getClass().getResourceAsStream(path));}
+		try{tempImg = ImageIO.read(new FileInputStream(path));}
 		catch(IOException e){e.printStackTrace();}
 		
 		this.imgWidth = tempImg.getWidth()/xFrameNum;

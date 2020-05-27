@@ -7,19 +7,21 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import controller.StatisticsCtr;
 import db.DataAccessException;
 import gui.Statistics;
 import model.Bike;
+import model.Part;
 
 class TestSort {
-	//
+	
 
 
-	@Test
+	//@Test
 	void testFinishedBikesWithTimeRange() {
-		Statistics s = new Statistics();
-
+		
 		try {
+			StatisticsCtr s = new StatisticsCtr();
 			LocalDateTime dt1 
             = LocalDateTime.parse("2020-05-01T00:00:00"); 
 			LocalDateTime dt2
@@ -34,10 +36,11 @@ class TestSort {
 	
 	@Test
 	void testAllBikesWithTimeRange() {
-		Statistics s = new Statistics();
+		
 		try {
+			StatisticsCtr s = new StatisticsCtr();
 			LocalDateTime dt1 
-            = LocalDateTime.parse("2020-05-24T12:45:30"); 
+            = LocalDateTime.parse("2020-05-01T12:45:30"); 
 			List<Bike> bikes = s.sortAllBikesDate(dt1, java.time.LocalDateTime.now());
 			bikes.forEach((bike)->System.out.println(bike.getId()+" "+bike.getBikeName()+" "+bike.getRegisterDate()));
 		} catch (DataAccessException e) {
@@ -46,5 +49,16 @@ class TestSort {
 		}
 	}
 	
+	@Test
+	void testAllPart() {
+		try {
+			StatisticsCtr s = new StatisticsCtr();
+			List<Part> parts = s.findAllParts();
+			parts.forEach((part)->System.out.println(part.getId()+" "+part.getName()+" new price: "+part.getNewPrice()+" used price: "+ part.getUsedPrice()));
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 }
