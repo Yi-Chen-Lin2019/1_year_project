@@ -32,7 +32,7 @@ public class CellRenderer {
 		@Override
 		public Component getListCellRendererComponent(JList<? extends Part> list, Part value, int index, boolean isSelected, boolean cellHasFocus) {
 			dlcr = new DefaultListCellRenderer();
-			String textToShow = value.getName() + "        New Price: " + value.getNewPrice() + "        Used Price: " + value.getUsedPrice();
+			String textToShow = value.getName();
 			return dlcr.getListCellRendererComponent(list, textToShow, index, isSelected, cellHasFocus);
 		}
 
@@ -50,8 +50,8 @@ public class CellRenderer {
 				public void mouseClicked(MouseEvent e) {}
 				});
 			String textToShow = "";
-			if(value.getIsNew()) {textToShow = value.getPart().getName() + "        Price: " + value.getPart().getNewPrice();}
-			else {textToShow = value.getPart().getName() + "        Price: " + value.getPart().getUsedPrice();}
+			if(value.getIsNew()) {textToShow = value.getPart().getName();
+			else {textToShow = value.getPart().getName();
 			return dlcr.getListCellRendererComponent(list, textToShow, index, isSelected, cellHasFocus);
 		}
 
