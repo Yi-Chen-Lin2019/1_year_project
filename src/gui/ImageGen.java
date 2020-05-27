@@ -20,6 +20,7 @@ public class ImageGen {
 	private String path;
 	
 	
+	
 	/*imgWidth/imgHeight = Image 4x4 imgWidth = width/2    path - image resource path	*/
 	public ImageGen(int xFrameNum, int yFrameNum, String path, int widthSize, int heightSize){
 		this.xFrameNum = xFrameNum;
