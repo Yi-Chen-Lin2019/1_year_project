@@ -35,7 +35,7 @@ public class Category {
 		this.categoryName = categoryName;
 	}
 	
-	public void setColour(String colour) {
+	public void setColour(Color colour) {
 		this.colour = colour;
 	}
 }
