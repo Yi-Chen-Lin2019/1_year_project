@@ -12,11 +12,12 @@ import model.Part;
 import model.Repair;
 
 public class PartDB implements PartDBIF {
-	private static String FIND_ALL_Q = "Select PartId, PartName, UsedPrice, NewPrice, CategoryId, isAvailable from Part ";
-	private static String FIND_BY_ID_Q = FIND_ALL_Q + " where PartId = ?";
-	private static String FIND_BY_NAME_Q = FIND_ALL_Q + " where PartName like '%?%'";
+	private static String FIND_ALL = "Select PartId, PartName, UsedPrice, NewPrice, CategoryId, isAvailable from Part ";
+	private static String FIND_ALL_Q = "Select PartId, PartName, UsedPrice, NewPrice, CategoryId, isAvailable from Part where isAvailable = 1";
+	private static String FIND_BY_ID_Q = FIND_ALL + " where PartId = ?";
+	private static String FIND_BY_NAME_Q = FIND_ALL + " where PartName like ? and isAvailable = 1";
 	private static String INSERT_Q = "INSERT INTO Part (PartName, UsedPrice, NewPrice, CategoryId, isAvailable) values (?, ?, ?, ?, 1)";
-	private static String UPDATE_Q = "Update Part SET PartName = ?, UsedPrice = ?, NewPrice = ?, CategoryId = ?, isAvailable = ?  WHERE PartId = ?";
+	private static String UPDATE_Q = "Update Part SET PartName = ?, UsedPrice = ?, NewPrice = ?, CategoryId = ?, isAvailable = 1  WHERE PartId = ?";
 	private static String DELETE_Q = "Update Part SET isAvailable = 0 where PartId = ?";
 
 	
@@ -84,7 +85,7 @@ public class PartDB implements PartDBIF {
 		List<Part> res = new ArrayList<>(0);
 
 		try {
-			findByName.setString(1, name);
+			findByName.setString(1, "%" + name + "%");
 			ResultSet rs = this.findByName.executeQuery();
 			res = buildObjects(rs);
 		} catch (SQLException e) {
@@ -102,7 +103,7 @@ public class PartDB implements PartDBIF {
 					updatePS.setDouble(2, part.getUsedPrice());
 					updatePS.setDouble(3, part.getNewPrice());
 					updatePS.setInt(4,  part.getCategory().getCategoryId());
-					updatePS.setBoolean(5,  part.getIsAvailable());
+					updatePS.setInt(5,  part.getId());
 				} catch (SQLException e) {
 					// e.printStackTrace();
 					throw new DataAccessException(DBMessages.COULD_NOT_BIND_PS_VARS_INSERT, e);

@@ -24,7 +24,11 @@ public class BikeDB implements BikeDBIF{
 	private static String FIND_BY_SERIALN0_Q = FIND_ALL_Q + " WHERE Bike.SerialNumber = ?";
 	private static String UPDATE_Q = "Update Bike SET BikeName = ?, SoldDate = ?, Gender = ?, isExternalGear = ?, FinalPrice = ?, SalePrice = ? , TotalPartPrice = ?  WHERE BikeId = ?";
 	private static String INSERT_Q = "INSERT INTO Bike (SerialNumber, BikeName, RegisterDate, SoldDate, Gender, TotalPartPrice, FinalPrice, SalePrice, RepairListId, IsExternalGear) values (?,?,?,?,?,?,?,?,?,?)";
-	private static String DELETE_Q = "DELETE Bike FROM Bike WHERE BikeId = ?";
+	private static String DELETE_Q = "  delete from Repair where Repair.RepairListId = (Select RepairListId from Bike where BikeId = ?);" + 
+			"" + 
+			"  delete from Bike where BikeId = ?  " + 
+			"" + 
+			" delete from RepairList where RepairListId = ?";
 	private PreparedStatement findAll;
 	private PreparedStatement findById;
 	private PreparedStatement findBySerialNo;
@@ -170,7 +174,9 @@ public class BikeDB implements BikeDBIF{
 		boolean success = false;
 		try {
 			deletePS.setInt(1, bike.getId());
-			deletePS.executeQuery();
+			deletePS.setInt(2, bike.getId());
+			deletePS.setInt(3, bike.getRepairList().getId());
+			deletePS.executeUpdate();
 			success = true;
 		} catch (SQLException e) {
 			// e.printStackTrace();

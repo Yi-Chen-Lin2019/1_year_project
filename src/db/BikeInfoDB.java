@@ -10,11 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Bike;
+import model.RepairList;
 import model.UsedPart;
 
 public class BikeInfoDB implements BikeDBIF{
 	
-	private static String FIND_ALL_Q = "SELECT BikeId, SerialNumber, BikeName, RegisterDate, SoldDate, Gender, FinalPrice, SalePrice FROM BikeInfo";
+	private static String FIND_ALL_Q = "Select BikeId, SerialNumber, BikeName, RegisterDate, SoldDate, Gender, FinalPrice, SalePrice, TotalPartPrice, IsExternalGear, isFinished FROM BikeInfo";
 	private static String FIND_BY_ID_Q = FIND_ALL_Q + " WHERE Bike.BikeId = ?";
 	private static String FIND_BY_SERIALN0_Q = FIND_ALL_Q + " WHERE Bike.SerialNumber = ?";
 	private PreparedStatement findAll;
@@ -99,18 +100,22 @@ public class BikeInfoDB implements BikeDBIF{
 			}
 			
 			
-			//res.setTotalPartPrice(rs.getDouble("TotalPartPrice"));
+			res.setTotalPartPrice(rs.getDouble("TotalPartPrice"));
 			res.setFinalPrice(rs.getDouble("FinalPrice"));
 			res.setSalePrice(rs.getDouble("SalePrice"));
 		
-			/*	
+				
 			if(rs.getInt("isExternalGear") == 0) {
 				res.setIsExternalGear(true);
 			} else {
 				res.setIsExternalGear(false);
 			}
 			
+			RepairList r = new RepairList();
+			r.setIsFinished(rs.getBoolean("isFinished"));
+			res.createRepairList(r);
 			
+			/*
 			RepairListDB r = new RepairListDB();
 			res.createRepairList(r.findById(rs.getInt("RepairListId")));
 			*/

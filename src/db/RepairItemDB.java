@@ -184,10 +184,10 @@ public class RepairItemDB implements RepairItemDBIF {
 		try {
 			int categoryId;
 			if (isExternal) {
-				categoryId = 1;
+				categoryId = 2;
 			}
 			else {
-				categoryId = 2;
+				categoryId = 3;
 			}
 				
 			findByGearTypePS.setInt(1, categoryId);

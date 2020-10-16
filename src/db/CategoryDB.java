@@ -86,6 +86,7 @@ public class CategoryDB implements CategoryDBIF {
 		try {
 			updatePS.setString(1, category.getCategoryName());
 			updatePS.setString(2, category.getColour());
+			updatePS.setInt(3, category.getCategoryId());
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_BIND_PS_VARS_INSERT, e);
