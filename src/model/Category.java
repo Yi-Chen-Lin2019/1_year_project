@@ -1,10 +1,13 @@
 package model;
 
+import java.awt.Color;
+
 public class Category {
 
 	private int categoryId;
 	private String categoryName;
 	private Color colour;
+	private String colourString;
 	
 	public Category() {
 		
@@ -12,19 +15,20 @@ public class Category {
 	
 	public Category(String categoryName, String colour) {
 		this.categoryName = categoryName;
+		this.colourString = colour;
 		switch(colour) {
-        case "black":
-            this.colour = Color.BLACK;
-        case "green":
-        	this.colour = Color.GREEN;
-        case "red":
-        	this.colour = Color.RED;
-        case "pink":
-        	this.colour = Color.PINK;
-        case "blue":
-        	this.colour = Color.BLUE;
-        case "yellow":
-        	this.colour = Color.YELLOW;   
+	        case "black":
+	            this.colour = Color.BLACK;
+	        case "green":
+	        	this.colour = Color.GREEN;
+	        case "red":
+	        	this.colour = Color.RED;
+	        case "pink":
+	        	this.colour = Color.PINK;
+	        case "blue":
+	        	this.colour = Color.BLUE;
+	        case "yellow":
+	        	this.colour = Color.YELLOW;   
     }
 
 	}
@@ -37,7 +41,11 @@ public class Category {
 		return categoryName;
 	}
 	
-	public Color getColour() {
+	public String getColour() {
+		return colourString;
+	}
+	
+	public Color getColourClass() {
 		return colour;
 	}
 	
@@ -49,7 +57,27 @@ public class Category {
 		this.categoryName = categoryName;
 	}
 	
-	public void setColour(Color colour) {
-		this.colour = colour;
+	public void setColour(String colour) {
+		switch(colour) {
+	        case "black":
+	            this.colour = Color.BLACK;
+	        case "green":
+	        	this.colour = Color.GREEN;
+	        case "red":
+	        	this.colour = Color.RED;
+	        case "pink":
+	        	this.colour = Color.PINK;
+	        case "blue":
+	        	this.colour = Color.BLUE;
+	        case "yellow":
+	        	this.colour = Color.YELLOW;   
+		}
+		this.colourString = colour;
 	}
+	
+    
+    @Override
+    public String toString() {
+    	return getCategoryName();
+    }
 }
