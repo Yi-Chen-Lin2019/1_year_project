@@ -8,7 +8,8 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import model.*;
+import model.Part;
+import model.UsedPart;
 
 public class CellRenderer {
 	private static CellRenderer cellRenderer;
@@ -50,8 +51,8 @@ public class CellRenderer {
 				public void mouseClicked(MouseEvent e) {}
 				});
 			String textToShow = "";
-			if(value.getIsNew()) {textToShow = value.getPart().getName();
-			else {textToShow = value.getPart().getName();
+			if(value.getIsNew()) {textToShow = value.getPart().getName();}
+			else {textToShow = value.getPart().getName();}
 			return dlcr.getListCellRendererComponent(list, textToShow, index, isSelected, cellHasFocus);
 		}
 

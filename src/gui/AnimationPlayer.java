@@ -1,4 +1,7 @@
-/*Code by Milek Radoslaw 2020.05*/
+/**
+ * @author Radoslaw Milek
+ * @since 2020-05
+ */
 
 package gui;
 

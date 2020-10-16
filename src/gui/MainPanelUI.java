@@ -1,9 +1,13 @@
-/*Code by Milek Radoslaw 2020.05*/
+/**
+ * @author Radoslaw Milek
+ * @since 2020-05
+ */
 
 package gui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -12,8 +16,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import db.DataAccessException;
 
 public class MainPanelUI {
 	
@@ -27,32 +29,42 @@ public class MainPanelUI {
 	ImageGen logoImage, logoImageBig;
 	ImageGen btnEnteredImage, btnClickedImage;
 	ImageGen exitBtnImage;
+	ImageGen loadingImage;
 	
 	
 	public MainPanelUI() {
-//		screenWidth =Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-//		screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		screenWidth =Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		
-		screenWidth = 3840;
-		screenHeight = 2160;
+//		screenWidth = 1920;
+//		screenHeight = 1080;
 
+//		screenWidth = 1024;
+//		screenHeight = 768;
+		
+//		screenWidth = 1440;
+//		screenHeight = 900;
+
+		//Sets screenWidth and screenHeight so it would always be 16:9 aspect ratio
 		if((screenHeight/screenWidth)>0.5625) {screenHeight=Math.floor(screenWidth*0.5625);}
 		else if(screenHeight/screenWidth<0.5625) {screenWidth=Math.floor(screenHeight*1.7778);}
 		
 		initializeImages();
 		initializeFrame();
 		initialize();
-		
+		MainMenuUI mm = new MainMenuUI(frame, contentPanel, screenWidth, screenHeight);
 	}
 
 	
 	private void initializeImages() {
-		exitBtnImage = new ImageGen(2, 4, "/exitBtn.png", (int) Math.ceil(screenWidth*0.02864), (int) Math.ceil(screenHeight*0.02777));
-		chainImage = new ImageGen(1,1, "/chain.png", (int) Math.ceil(screenWidth*1),(int) Math.ceil(screenHeight*0.16388));
-		logoImage = new ImageGen(2, 1, "/logo.png", (int) Math.ceil(screenHeight*0.14537), (int) Math.ceil(screenHeight*0.14537));
-		logoImageBig = new ImageGen(2, 1, "/logo.png", (int) Math.ceil(screenHeight*0.16388), (int) Math.ceil(screenHeight*0.16388));
-		btnEnteredImage = new ImageGen(8, 1, "/btnEntered.png", (int) Math.ceil(screenWidth*0.13020), (int) Math.ceil(screenHeight*0.08611));
-		btnClickedImage = new ImageGen(8, 1, "/btnClicked.png", (int) Math.ceil(screenWidth*0.13020), (int) Math.ceil(screenHeight*0.08611));
+		
+		exitBtnImage = new ImageGen(2, 4, this.getClass().getResource("/exitBtn.png"), (int) Math.ceil(screenWidth*0.02864), (int) Math.ceil(screenHeight*0.02777));
+		chainImage = new ImageGen(1,1, this.getClass().getResource("/chain.png"), (int) Math.ceil(screenWidth*1),(int) Math.ceil(screenHeight*0.16388));
+		logoImage = new ImageGen(2, 1, this.getClass().getResource("/logo.png"), (int) Math.ceil(screenHeight*0.14537), (int) Math.ceil(screenHeight*0.14537));
+		logoImageBig = new ImageGen(2, 1, this.getClass().getResource("/logo.png"), (int) Math.ceil(screenHeight*0.16388), (int) Math.ceil(screenHeight*0.16388));
+		btnEnteredImage = new ImageGen(8, 1, this.getClass().getResource("/btnEntered.png"), (int) Math.ceil(screenWidth*0.13020), (int) Math.ceil(screenHeight*0.08611));
+		btnClickedImage = new ImageGen(8, 1, this.getClass().getResource("/btnClicked.png"), (int) Math.ceil(screenWidth*0.13020), (int) Math.ceil(screenHeight*0.08611));
+		loadingImage = new ImageGen(11, 1, this.getClass().getResource("/loadingImg.png"), (int) Math.ceil(screenWidth*0.13020), (int) Math.ceil(screenWidth*0.13020));
 	}
 	
 	private void initializeFrame(){
@@ -61,6 +73,7 @@ public class MainPanelUI {
         frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         frame.setResizable(false);
         frame.setUndecorated(true);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().setLayout(null);
         frame.getContentPane().setBackground(Color.WHITE);
         frame.setLocationRelativeTo(null);
@@ -70,6 +83,13 @@ public class MainPanelUI {
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setBounds((int) Math.floor(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2-screenWidth/2), 0, (int)screenWidth, (int)screenHeight);
         frame.getContentPane().add(mainPanel);
+        
+        JPanel messagePanel = new JPanel();
+        messagePanel.setVisible(false);
+        messagePanel.setLayout(null);
+        messagePanel.setBackground(new Color(0,0,0,0));
+        messagePanel.setBounds((int) Math.ceil(screenWidth*0.02604), (int) Math.ceil(screenHeight*0.16388), (int) Math.ceil(screenWidth*0.94791), (int) Math.ceil(screenHeight*0.79166));
+        mainPanel.add(messagePanel);
         
         contentPanel = new JPanel();
         contentPanel.setLayout(null);
@@ -197,8 +217,7 @@ public class MainPanelUI {
 				bc2.setMode(1);
 				bc2.startRunning();
 				bc2.setCurrentFrame(0);
-				try{UpdateBikeUI test = new UpdateBikeUI(frame, contentPanel, screenWidth, screenHeight);}
-				catch(Exception a) {}
+				BikeListUI bikeListUI = new BikeListUI(frame, contentPanel, screenWidth, screenHeight, 1);
 			}
 		});
 		mainNav.add(workingOnBtnHitBox);
@@ -239,6 +258,7 @@ public class MainPanelUI {
 				bc3.setMode(1);
 				bc3.startRunning();
 				bc3.setCurrentFrame(0);
+				BikeListUI bikeListUI = new BikeListUI(frame, contentPanel, screenWidth, screenHeight, 2);
 			}
 		});
 		mainNav.add(bikesForSaleBtnHitBox);
@@ -279,6 +299,7 @@ public class MainPanelUI {
 				bc4.setMode(1);
 				bc4.startRunning();
 				bc4.setCurrentFrame(0);
+				BikeListUI bikeListUI = new BikeListUI(frame, contentPanel, screenWidth, screenHeight, 3);
 			}
 		});
 		mainNav.add(bikeHistoryBtnHitBox);
@@ -359,6 +380,7 @@ public class MainPanelUI {
 				bc6.setMode(1);
 				bc6.startRunning();
 				bc6.setCurrentFrame(0);
+				SettingsUI settingsUI = new SettingsUI(frame, contentPanel, screenWidth, screenHeight);
 			}
 		});
 		mainNav.add(settingsBtnHitBox);

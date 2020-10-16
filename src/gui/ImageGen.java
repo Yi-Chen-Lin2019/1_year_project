@@ -1,3 +1,8 @@
+/**
+ * @author Radoslaw Milek
+ * @since 2020-05
+ */
+
 package gui;
 
 import java.awt.Graphics2D;
@@ -6,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -22,16 +28,16 @@ public class ImageGen {
 	
 	
 	/*imgWidth/imgHeight = Image 4x4 imgWidth = width/2    path - image resource path	*/
-	public ImageGen(int xFrameNum, int yFrameNum, String path, int widthSize, int heightSize){
+	public ImageGen(int xFrameNum, int yFrameNum, URL path, int widthSize, int heightSize){
 		this.xFrameNum = xFrameNum;
 		this.yFrameNum = yFrameNum;
-		this.path = path;
+		//this.path = path;
 		this.widthSize = widthSize;
 		this.heightSize = heightSize;
 		
 		tempImg = null;
 		
-		try{tempImg = ImageIO.read(new FileInputStream(path));}
+		try{tempImg = ImageIO.read(path.openStream());}
 		catch(IOException e){e.printStackTrace();}
 		
 		this.imgWidth = tempImg.getWidth()/xFrameNum;
