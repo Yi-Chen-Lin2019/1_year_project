@@ -29,5 +29,9 @@ public class PartCtr {
 	public List<Part> findAllParts() throws DataAccessException{
 		return partDB.findAll();
 	}
+
+	public boolean deletePart(Part part) throws DataAccessException {
+		return partDB.deletePart(part);
+	}
 		
 }

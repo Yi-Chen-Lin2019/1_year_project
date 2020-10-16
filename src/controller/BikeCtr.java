@@ -3,15 +3,15 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import db.BikeAlreadyEnteredException;
 import db.BikeDB;
 import db.DataAccessException;
 import model.Bike;
-import model.RepairList;
+import model.UsedPart;
 
 public class BikeCtr {
 	 private BikeDB bikeDb;
 	 private RepairCtr repairCtr = new RepairCtr();
+	 private UsedPartCtr usedPartCtr = new UsedPartCtr();
 	 
 	 public BikeCtr() throws DataAccessException {
 		 bikeDb = new BikeDB();
@@ -57,9 +57,15 @@ public class BikeCtr {
 		 return unfinished;
 	 } 
 	 
+	 public Bike saveBike(Bike bike, ArrayList<UsedPart> addedUsedParts, ArrayList<UsedPart> removedUsedParts) throws DataAccessException {
+		 if(!usedPartCtr.updateUsedParts(addedUsedParts, removedUsedParts, bike.getId())) {return null;}
+		 repairCtr.updateRepairList(bike.getRepairList());
+		 Bike updatedBike = bikeDb.updateBike(bike);
+		 return updatedBike;
+	 }
+	 
 	 public Bike updateBike(Bike bike) throws DataAccessException {
-		 //?we update the repairList with all repairs too?
-		 bike.createRepairList(repairCtr.updateRepairList(bike.getRepairList()));
+		 repairCtr.updateRepairList(bike.getRepairList());
 		 Bike updatedBike = bikeDb.updateBike(bike);
 		 return updatedBike;
 	 }
@@ -86,6 +92,15 @@ public class BikeCtr {
 	 
 	 public List<Bike> findAllBikes() throws DataAccessException{
 			return bikeDb.findAll();
+	 }
+	 
+	 public double getTotalPartPrice(Bike bike) {
+		 double totalPrice = 0;
+		 for(UsedPart i : bike.getUsedParts()) {
+			 if(i.getIsNew()) {totalPrice =+ i.getPart().getNewPrice();}
+			 if(!i.getIsNew()) {totalPrice =+ i.getPart().getUsedPrice();}
+		 }
+		 return totalPrice;
 	 }
 }
 	 

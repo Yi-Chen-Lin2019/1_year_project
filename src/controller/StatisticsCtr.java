@@ -27,7 +27,38 @@ public class StatisticsCtr {
 	public Bike findBikeById(int id) throws DataAccessException{
 		return bikeDb.findById(id);
 	}
+	public List<Bike> getUnfinishedBikes() throws DataAccessException{
+		 List<Bike> bikes = bikeDb.findAll();
+		 List<Bike> unfinished = new ArrayList<Bike>();
+		 for (Bike b: bikes) {
+			 if(!b.getRepairList().getIsFinished()) {
+				 unfinished.add(b);
+			 }
+		 }
+		 return unfinished;
+	 } 
 	
+	public List<Bike> getForSaleBikes() throws DataAccessException{
+		 List<Bike> bikes = bikeDb.findAll();
+		 List<Bike> forSale = new ArrayList<Bike>();
+		 for (Bike b: bikes) {
+			 if(b.getRepairList().getIsFinished() && b.getSoldDate()==null) {
+				 forSale.add(b);
+			 }
+		 }
+		 return forSale;
+	 } 
+	
+	public List<Bike> getHistoryBikes() throws DataAccessException{
+		 List<Bike> bikes = bikeDb.findAll();
+		 List<Bike> sold = new ArrayList<Bike>();
+		 for (Bike b: bikes) {
+			 if(b.getSoldDate()!=null) {
+				 sold.add(b);
+			 }
+		 }
+		 return sold;
+	 } 
 		
 	public List<Bike> sortAllBikesDate(LocalDateTime from, LocalDateTime to) throws DataAccessException{
 		List<Bike> bikes = findAllBikes();
