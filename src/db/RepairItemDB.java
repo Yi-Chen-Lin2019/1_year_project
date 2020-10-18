@@ -12,12 +12,12 @@ import model.RepairItem;
 
 public class RepairItemDB implements RepairItemDBIF {
 	Connection connection;
-	private static String FIND_ALL = "Select RepairItemId, RepairItemName, CategoryId from RepairItem";
-	private static String FIND_ALL_Q = "Select RepairItemId, RepairItemName, CategoryId from RepairItem where IsDisabled = 0";
+	private static String FIND_ALL = "Select RepairItemId, RepairItemName, RepairItemDanish, CategoryId from RepairItem";
+	private static String FIND_ALL_Q = "Select RepairItemId, RepairItemName, RepairItemDanish, CategoryId from RepairItem where IsDisabled = 0";
 	private static String FIND_BY_ID_Q = FIND_ALL + " where RepairItemId = ? and IsDisabled = 0";
 	private static String FIND_BY_GEARTYPE = FIND_ALL + " where CategoryId != ? and IsDisabled = 0";
-	private static String INSERT_Q = "INSERT INTO RepairItem (RepairItemName, CategoryId) values (?, ?)";
-	private static String UPDATE_Q = "Update RepairItem SET RepairItemName = ?, CategoryId = ? WHERE RepairItemId = ?";
+	private static String INSERT_Q = "INSERT INTO RepairItem (RepairItemName, RepairItemDanish, CategoryId) values (?, ?, ?)";
+	private static String UPDATE_Q = "Update RepairItem SET RepairItemName = ?, RepairItemDanish =?, CategoryId = ? WHERE RepairItemId = ?";
 	private static String DELETE_Q = "Update RepairItem SET IsDisabled = 1 where RepairItemId = ?";
 	private PreparedStatement findAll;
 	private PreparedStatement findById;
@@ -88,8 +88,10 @@ public class RepairItemDB implements RepairItemDBIF {
 		//RepairItemName = ?, CategoryId = ? WHERE RepairItemId = ?
 		try {
 			updatePS.setString(1, repairItem.getName());
-			updatePS.setInt(2, repairItem.getCategory().getCategoryId());
-			updatePS.setInt(3, repairItem.getRepairItemId());
+			updatePS.setString(2, repairItem.getDanish());
+			updatePS.setInt(3, repairItem.getCategory().getCategoryId());
+			updatePS.setInt(4, repairItem.getRepairItemId());
+			
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_BIND_PS_VARS_INSERT, e);
@@ -108,7 +110,8 @@ public class RepairItemDB implements RepairItemDBIF {
 				//(RepairItemName, CategoryId) values (?, ?)
 				try {
 					insertPS.setString(1, repairItem.getName());
-					insertPS.setInt(2, repairItem.getCategory().getCategoryId());
+					insertPS.setString(2, repairItem.getDanish());
+					insertPS.setInt(3, repairItem.getCategory().getCategoryId());
 				} catch (SQLException e) {
 					// e.printStackTrace();
 					throw new DataAccessException(DBMessages.COULD_NOT_BIND_PS_VARS_INSERT, e);
@@ -154,6 +157,7 @@ public class RepairItemDB implements RepairItemDBIF {
 			CategoryDB categoryDB = new CategoryDB();
 			res.setCategory(categoryDB.findById(rs.getInt("CategoryId")));
 			res.setName(rs.getString("RepairItemName"));
+			res.setDanish(rs.getString("RepairItemDanish"));
 			res.setRepairItemId(rs.getInt("RepairItemId"));
 
 		} catch (SQLException e) {
