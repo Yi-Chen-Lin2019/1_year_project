@@ -1,5 +1,5 @@
 /**
- * @author Radoslaw Milek
+ * @author Radoslaw Milek, Yi-Chen Lin
  * @since 2020-05
  */
 
@@ -23,6 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -75,17 +76,19 @@ public class UpdateBikeUI extends GuiTools{
 	private ArrayList<UsedPart> usedPartsList;
 	private DefaultListModel<UsedPart> usedPartsListRepresentation;
 	
+	private int language;
+	
 	
 	BikeCtr bikeCtr;
 	Bike bike;
 	
-	public UpdateBikeUI(JFrame frame, JPanel contentPanel, double screenWidth, double screenHeight, Bike bike)  {
+	public UpdateBikeUI(JFrame frame, JPanel contentPanel, double screenWidth, double screenHeight, Bike bike, int language)  {
 		this.frame = frame;
 		this.contentPanel = contentPanel;
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 		this.bike = bike;
-		
+		this.language = language;
 		
 		
 		startLoadingAnimation(frame, contentPanel);
@@ -163,7 +166,6 @@ public class UpdateBikeUI extends GuiTools{
 		bikeNameText.setFont(new Font("Calibri", Font.PLAIN, (int) Math.round(20 * (screenWidth / 1920))));
 		bikeNameText.setBounds(0, (int) Math.ceil(screenHeight * 0.00185), (int) Math.ceil(screenWidth * 0.0485),
 				(int) Math.ceil(screenHeight * 0.02314));
-
 
 		bikeNameInput = new JTextField();
 		bikeNameInput.setForeground(Color.BLACK);
@@ -357,79 +359,8 @@ public class UpdateBikeUI extends GuiTools{
 			tempWidth = tempWidth + (int) Math.round(r.getWidth() + 10);
 		}
 		
+		switchLanguage(categoryPanel, language);
 		
-		//Counts every categoryPanel
-		int it2 = 0;
-		//Counts every repair
-		int it4 = 0;
-		// Automatic generation of Repairs from RepairList
-		for (JPanel i : categoryPanel) {
-			//Counts every repair inside category
-			int it3 = 0;
-			int tempHeight = 0;
-			ArrayList<JLabel> repairItemLabels = new ArrayList<>();
-			for (int a=0; a<numRepairsInCategory.get(it2); a++) {
-				JLabel repairCheckBox = new JLabel();
-				//Saves an iterator number as final so the JLabel would know which number it was
-				final int it4Fin = it4;
-				JLabel repairTitle = new JLabel("   " + bike.getRepairList().getAllRepairs().get(it4).getRepairItem().getName());
-				repairTitle.setForeground(Color.BLACK);
-				repairTitle.setBackground(new Color(200, 200, 200, 255));
-				repairTitle.setOpaque(true);
-				repairTitle.setHorizontalAlignment(JLabel.LEFT);
-				repairTitle.setVerticalAlignment(JLabel.BOTTOM);
-				repairTitle.setFont(new Font("Arial", Font.PLAIN, (int) Math.round(20 * (screenWidth / 1920))));
-				repairTitle.setBounds(0, (int) Math.ceil(screenHeight * (10 + tempHeight + it3 * 10) / 1080),
-						(int) Math.ceil(screenWidth * 0.40989), (int) Math.ceil(screenHeight * 0.02314));
-				repairTitle.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseEntered(MouseEvent e) {
-						i.remove(repairTitle);
-						i.remove(repairTitle);
-						repairTitle.setBackground(new Color(107, 107, 107, 255));
-						i.add(repairCheckBox);
-						i.add(repairTitle);
-						frame.repaint();
-					}
-				});
-				repairTitle.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseExited(MouseEvent e) {
-						i.remove(repairTitle);
-						i.remove(repairTitle);
-						repairTitle.setBackground(new Color(200, 200, 200, 255));
-						i.add(repairCheckBox);
-						i.add(repairTitle);
-						frame.repaint();
-					}
-				});
-				repairTitle.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseReleased(MouseEvent e) {
-						checkBoxRepair.set(it4Fin, (checkBoxRepair.get(it4Fin) + 1));
-						if (checkBoxRepair.get(it4Fin) == 4) {
-							checkBoxRepair.set(it4Fin, 0);
-						}
-						repairCheckBox.setIcon(new ImageIcon(checkBoxImage.getFrameArray().get(checkBoxRepair.get(it4Fin))));
-					}
-				});
-				repairCheckBox.setHorizontalAlignment(JLabel.CENTER);
-				repairCheckBox.setVerticalAlignment(JLabel.CENTER);
-				repairCheckBox.setBounds((int) Math.ceil(screenWidth * 0.34479),
-						(int) Math.ceil(screenHeight * (10 + tempHeight + it3 * 10) / 1080),
-						(int) Math.ceil(screenHeight * 0.02314), (int) Math.ceil(screenHeight * 0.02314));
-				repairCheckBox.setIcon(new ImageIcon(checkBoxImage.getFrameArray().get(checkBoxRepair.get(it4Fin))));
-
-				i.add(repairCheckBox);
-				i.add(repairTitle);
-
-				it3++;
-				it4++;
-				tempHeight = tempHeight + 25 + 10;
-			}
-			it2++;
-		}
-
 		/** Note Panel */
 		JPanel notePanel = new JPanel();
 		notePanel.setLayout(null);
@@ -700,7 +631,11 @@ public class UpdateBikeUI extends GuiTools{
 					updatedBike = bikeCtr.findBikeByID(bike.getId());} 
 					catch (DataAccessException e) {}
 					
-					if(!wasLoadingInterrupted()) {UpdateBikeUI updateBikeUI = new UpdateBikeUI(frame, contentPanel, screenWidth, screenHeight, updatedBike);}
+					Object[] options = {"English", "Danish"};
+					int x = JOptionPane.showOptionDialog(null,"Choose a language for checklist: ",
+			                "Click a button",
+			                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+					if(!wasLoadingInterrupted()) {UpdateBikeUI updateBikeUI = new UpdateBikeUI(frame, contentPanel, screenWidth, screenHeight, updatedBike, x);}
 				}
 		});
 		t1.start();
@@ -747,6 +682,84 @@ public class UpdateBikeUI extends GuiTools{
 		}
 		usedPartsJList.setModel(usedPartsListRepresentation);}
 		usedPartsListScroll.setViewportView(usedPartsJList);
+	}
+	
+	private void switchLanguage(ArrayList<JPanel> categoryPanel, int language) {
+		//Counts every categoryPanel
+				int it2 = 0;
+				//Counts every repair
+				int it4 = 0;
+				// Automatic generation of Repairs from RepairList
+				for (JPanel i : categoryPanel) {
+					//Counts every repair inside category
+					int it3 = 0;
+					int tempHeight = 0;
+					ArrayList<JLabel> repairItemLabels = new ArrayList<>();
+					for (int a=0; a<numRepairsInCategory.get(it2); a++) {
+						JLabel repairCheckBox = new JLabel();
+						//Saves an iterator number as final so the JLabel would know which number it was
+						final int it4Fin = it4;
+						JLabel repairTitle;
+						if(language ==1) {repairTitle = new JLabel("   " + bike.getRepairList().getAllRepairs().get(it4).getRepairItem().getDanish());}
+						else {repairTitle = new JLabel("   " + bike.getRepairList().getAllRepairs().get(it4).getRepairItem().getName());}
+						//JLabel repairTitle = new JLabel("   " + bike.getRepairList().getAllRepairs().get(it4).getRepairItem().getDanish());
+						repairTitle.setForeground(Color.BLACK);
+						repairTitle.setBackground(new Color(200, 200, 200, 255));
+						repairTitle.setOpaque(true);
+						repairTitle.setHorizontalAlignment(JLabel.LEFT);
+						repairTitle.setVerticalAlignment(JLabel.BOTTOM);
+						repairTitle.setFont(new Font("Arial", Font.PLAIN, (int) Math.round(20 * (screenWidth / 1920))));
+						repairTitle.setBounds(0, (int) Math.ceil(screenHeight * (10 + tempHeight + it3 * 10) / 1080),
+								(int) Math.ceil(screenWidth * 0.40989), (int) Math.ceil(screenHeight * 0.02314));
+						repairTitle.addMouseListener(new MouseAdapter() {
+							@Override
+							public void mouseEntered(MouseEvent e) {
+								i.remove(repairTitle);
+								i.remove(repairTitle);
+								repairTitle.setBackground(new Color(107, 107, 107, 255));
+								i.add(repairCheckBox);
+								i.add(repairTitle);
+								frame.repaint();
+							}
+						});
+						repairTitle.addMouseListener(new MouseAdapter() {
+							@Override
+							public void mouseExited(MouseEvent e) {
+								i.remove(repairTitle);
+								i.remove(repairTitle);
+								repairTitle.setBackground(new Color(200, 200, 200, 255));
+								i.add(repairCheckBox);
+								i.add(repairTitle);
+								frame.repaint();
+							}
+						});
+						repairTitle.addMouseListener(new MouseAdapter() {
+							@Override
+							public void mouseReleased(MouseEvent e) {
+								checkBoxRepair.set(it4Fin, (checkBoxRepair.get(it4Fin) + 1));
+								if (checkBoxRepair.get(it4Fin) == 4) {
+									checkBoxRepair.set(it4Fin, 0);
+								}
+								repairCheckBox.setIcon(new ImageIcon(checkBoxImage.getFrameArray().get(checkBoxRepair.get(it4Fin))));
+							}
+						});
+						repairCheckBox.setHorizontalAlignment(JLabel.CENTER);
+						repairCheckBox.setVerticalAlignment(JLabel.CENTER);
+						repairCheckBox.setBounds((int) Math.ceil(screenWidth * 0.34479),
+								(int) Math.ceil(screenHeight * (10 + tempHeight + it3 * 10) / 1080),
+								(int) Math.ceil(screenHeight * 0.02314), (int) Math.ceil(screenHeight * 0.02314));
+						repairCheckBox.setIcon(new ImageIcon(checkBoxImage.getFrameArray().get(checkBoxRepair.get(it4Fin))));
+
+						i.add(repairCheckBox);
+						i.add(repairTitle);
+
+						it3++;
+						it4++;
+						tempHeight = tempHeight + 25 + 10;
+					}
+					it2++;
+				}
+		
 	}
 
 }

@@ -142,12 +142,12 @@ public class ManageRepairItemUI {
 					
 					
 					if (process.getText() == "Creating") {
-						repairItem = new RepairItem(category, repairItemNameField.getText());
+						repairItem = new RepairItem(category, repairItemNameField.getText(), "To be added");
 						repairItem = repairItemCtr.newRepairItem(repairItem);
 						process.setText("Created");
 					}
 					else {
-						repairItem = new RepairItem(category, (String)table.getValueAt(table.getSelectedRow(), 1));
+						repairItem = new RepairItem(category, (String)table.getValueAt(table.getSelectedRow(), 1), "To be added");
 						Object o = table.getValueAt(table.getSelectedRow(), 0);
 						int id = Integer.parseInt(o.toString());
 						repairItem.setRepairItemId(id);

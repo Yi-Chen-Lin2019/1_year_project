@@ -1,6 +1,7 @@
 /**
- * @author Radoslaw Milek
+ * @author Radoslaw Milek, Yi-Chen Lin
  * @since 2020-05
+ * 
  */
 
 package gui;
@@ -24,6 +25,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -166,7 +168,11 @@ public class BikeListUI extends GuiTools{
 								public void run() {
 									try {
 										Bike selectedBike = bikeCtr.findBikeByID(searchBikeArrayList.get(selectedIndex).getId());
-										if(!wasLoadingInterrupted()) {UpdateBikeUI updateBikeUI = new UpdateBikeUI(frame, contentPanel, screenWidth, screenHeight, selectedBike);}
+										Object[] options = {"English", "Danish"};
+										int x = JOptionPane.showOptionDialog(null,"Choose a language for checklist: ",
+								                "Click a button",
+								                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+										if(!wasLoadingInterrupted()) {UpdateBikeUI updateBikeUI = new UpdateBikeUI(frame, contentPanel, screenWidth, screenHeight, selectedBike, x);}
 									}
 									catch (DataAccessException e1) {
 										e1.printStackTrace();
