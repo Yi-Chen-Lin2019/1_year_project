@@ -1,5 +1,5 @@
 /**
- * @author Radoslaw Milek
+ * @author Radoslaw Milek, Yi-Chen Lin
  * @since 2020-05
  */
 
@@ -273,7 +273,11 @@ public class RegisterBikeUI extends GuiTools{
 									if(checkBoxGears[0]==1) {isExternalGear=true;}
 								Bike bike = new Bike(serialNumberInput.getText(), gender, bikeNameInput.getText(), isExternalGear);
 								try{bikeCtr.registerBike(bike); 
-								UpdateBikeUI updateBikeUI = new UpdateBikeUI(frame, contentPanel, screenWidth, screenHeight, bike);}
+								Object[] options = {"English", "Danish"};
+								int x = JOptionPane.showOptionDialog(null,"Choose a language for checklist: ",
+						                "Click a button",
+						                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+								UpdateBikeUI updateBikeUI = new UpdateBikeUI(frame, contentPanel, screenWidth, screenHeight, bike, x);}
 								catch(DataAccessException a) {a.printStackTrace();}
 							}
 					});					
