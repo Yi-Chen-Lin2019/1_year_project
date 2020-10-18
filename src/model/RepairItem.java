@@ -5,6 +5,7 @@ public class RepairItem {
 	private int repairItemId;
 	private String name;
 	private Category category;
+	private String danish;
 	
 	
 	
@@ -13,9 +14,10 @@ public class RepairItem {
 	}
 	
 	
-	public RepairItem(Category category, String name) {
+	public RepairItem(Category category, String name, String danish) {
 		this.category = category;
-		this.name = name;		
+		this.name = name;
+		this.danish = danish;
 	}
 	
 	public int getRepairItemId() {
@@ -41,4 +43,7 @@ public class RepairItem {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
+	
+	public void setDanish(String danish) {this.danish = danish;}
+	public String getDanish() {return danish;}
 }
