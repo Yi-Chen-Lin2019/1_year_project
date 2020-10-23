@@ -105,12 +105,12 @@ public class BikeListUI extends GuiTools{
         
         switch(listType) {
         case 1: 
-        	middleButtonText = "Mark for Sale";
+        	middleButtonText = "Sale";
         	constructBikeListPanel();
         	break;
         	
         case 2: 
-        	middleButtonText = "Mark as Sold";
+        	middleButtonText = "Sold";
         	constructBikeListPanel();
         	break;
         	
@@ -305,218 +305,25 @@ public class BikeListUI extends GuiTools{
 		int tableDivideNumber = 0;
 		//iterator, counts number of forEach loop
 		int it = 0;
+		boolean isFirst = true;
 		bikeListPanel = new JPanel();
 		bikeListPanel.setLayout(new BoxLayout(bikeListPanel, BoxLayout.PAGE_AXIS));
 		bikeListPanel.setBackground(Color.WHITE);
 			switch(listType) {
 			case 1:
-	        	try {
-	        		//lin
-	        		StatisticsCtr sCtr = new StatisticsCtr();
-	        		searchBikeArrayList = bikeArrayList = (ArrayList<Bike>) sCtr.getUnfinishedBikes();}
-	        	catch(DataAccessException e) {e.printStackTrace();}
-				//For each loop creates listComponents from bike list
-				for(Bike bike : searchBikeArrayList) {
-				//assigns number to every listComponent
-				final int itFin = it;
-				final JPanel listComponent = new JPanel();
-				bikeListPanel.setPreferredSize(new Dimension(0, searchBikeArrayList.size()*(int) Math.ceil(screenHeight * 0.028)));
-				
-				listComponent.setBackground(new Color(64, 64, 64, 255));
-				listComponent.setOpaque(true);
-				listComponent.setLayout(new BoxLayout(listComponent, BoxLayout.LINE_AXIS));
-				listComponent.setMaximumSize(new Dimension(Integer.MAX_VALUE, (int) Math.ceil(screenHeight * 0.028)));
-				
-					if(it==0) {
-						listComponent.setBackground(new Color(125, 184, 182, 255));
-						JLabel tableLabel1 = new JLabel("   Name");
-						JLabel tableLabel2 = new JLabel("   Serial Number");
-						JLabel tableLabel3 = new JLabel("   Registered Date");
-						listComponent.add(tableLabel1);
-						listComponent.add(tableLabel2);
-						listComponent.add(tableLabel3);
-						
-						//Sets divide number based on number of labels added to listComponent
-						for(Component c : listComponent.getComponents()) {tableDivideNumber++;}
-						
-						//Setting default values to every Label in ListComponent
-						for(Component c : listComponent.getComponents()) {
-							JLabel label = (JLabel) c;
-							label.setMaximumSize(new Dimension((int) Math.ceil(screenWidth * 0.31614/tableDivideNumber), Integer.MAX_VALUE));
-							label.setForeground(Color.WHITE);
-							label.setHorizontalAlignment(JLabel.LEFT);
-							label.setVerticalAlignment(JLabel.CENTER);
-							label.setFont(new Font("Arial", Font.PLAIN, (int) Math.round(15 * (screenWidth / 1920))));
-						}
-					}
-					
-					else {
-						listComponent.addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseEntered(MouseEvent e) {
-								if(selectedIndex == itFin) {listComponent.setBackground(new Color(124, 153, 38, 255));}
-								else {listComponent.setBackground(new Color(107, 107, 107, 255));}
-							}
-						});
-						listComponent.addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseExited(MouseEvent e) {
-								if(selectedIndex == itFin) {listComponent.setBackground(new Color(124, 153, 38, 255));}
-								else {listComponent.setBackground(new Color(64, 64, 64, 255));}
-							}
-						});
-						listComponent.addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseReleased(MouseEvent e) {
-								selectedIndex = itFin;
-								updateListSelectedColor();
-								Thread t1 = new Thread(new Runnable()
-								{
-									public void run() {
-										constructInformationPanel();
-									}
-								});
-								t1.start();
-								
-								listComponent.setBackground(new Color(124, 153, 38, 255));
-							}
-						});
-						
-						JLabel bikeNameLabel = new JLabel("     "+bike.getBikeName());
-						JLabel bikeSerialLabel = new JLabel("     "+ bike.getSerialNumber());
-						JLabel bikeDateLabel = new JLabel("     "+ bike.getRegisterDate().getDayOfMonth() +"."+ bike.getRegisterDate().getMonthValue() +"."+ bike.getRegisterDate().getYear());
-						listComponent.add(bikeNameLabel);
-						listComponent.add(bikeSerialLabel);
-						listComponent.add(bikeDateLabel);
-						savedListComponents.add(listComponent);
-						
-						
-						for(Component c : listComponent.getComponents()) {
-							JLabel label = (JLabel) c;
-							label.setMaximumSize(new Dimension((int) Math.ceil(screenWidth * 0.31614/tableDivideNumber), Integer.MAX_VALUE));
-							label.setForeground(Color.WHITE);
-							label.setHorizontalAlignment(JLabel.LEFT);
-							label.setVerticalAlignment(JLabel.CENTER);
-							label.setFont(new Font("Arial", Font.PLAIN, (int) Math.round(15 * (screenWidth / 1920))));
-						}		
-					}
-					
-					bikeListPanel.add(listComponent);
-					bikeListPanel.add(Box.createRigidArea(new Dimension(0, (int) Math.ceil(screenHeight * 0.00462))));
-					it++;
-				}
-				bikeList.setViewportView(bikeListPanel);
-					
-				
+				workingOn(it, isFirst, tableDivideNumber);				
 			break;
-			
-			
-			
+
 			case 2:
-	        	try {
-	        		StatisticsCtr sCtr = new StatisticsCtr();
-	        		searchBikeArrayList = bikeArrayList = (ArrayList<Bike>) sCtr.getForSaleBikes();}
-	        	catch(DataAccessException e) {e.printStackTrace();}
-				//For each loop creates listComponents from bike list
-				for(Bike bike : searchBikeArrayList) {
-				//assigns number to every listComponent
-				final int itFin = it;
-				final JPanel listComponent = new JPanel();
-				bikeListPanel.setPreferredSize(new Dimension(0, searchBikeArrayList.size()*(int) Math.ceil(screenHeight * 0.028)));
-				
-				listComponent.setBackground(new Color(64, 64, 64, 255));
-				listComponent.setOpaque(true);
-				listComponent.setLayout(new BoxLayout(listComponent, BoxLayout.LINE_AXIS));
-				listComponent.setMaximumSize(new Dimension(Integer.MAX_VALUE, (int) Math.ceil(screenHeight * 0.028)));
-				
-					if(it==0) {
-						listComponent.setBackground(new Color(125, 184, 182, 255));
-						JLabel tableLabel1 = new JLabel("   Name");
-						JLabel tableLabel2 = new JLabel("   Serial Number");
-						JLabel tableLabel3 = new JLabel("   Registered Date");
-						listComponent.add(tableLabel1);
-						listComponent.add(tableLabel2);
-						listComponent.add(tableLabel3);
-						
-						//Sets divide number based on number of labels added to listComponent
-						for(Component c : listComponent.getComponents()) {tableDivideNumber++;}
-						
-						//Setting default values to every Label in ListComponent
-						for(Component c : listComponent.getComponents()) {
-							JLabel label = (JLabel) c;
-							label.setMaximumSize(new Dimension((int) Math.ceil(screenWidth * 0.31614/tableDivideNumber), Integer.MAX_VALUE));
-							label.setForeground(Color.WHITE);
-							label.setHorizontalAlignment(JLabel.LEFT);
-							label.setVerticalAlignment(JLabel.CENTER);
-							label.setFont(new Font("Arial", Font.PLAIN, (int) Math.round(15 * (screenWidth / 1920))));
-						}
-					}
-					
-					else {
-						listComponent.addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseEntered(MouseEvent e) {
-								if(selectedIndex == itFin) {listComponent.setBackground(new Color(124, 153, 38, 255));}
-								else {listComponent.setBackground(new Color(107, 107, 107, 255));}
-							}
-						});
-						listComponent.addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseExited(MouseEvent e) {
-								if(selectedIndex == itFin) {listComponent.setBackground(new Color(124, 153, 38, 255));}
-								else {listComponent.setBackground(new Color(64, 64, 64, 255));}
-							}
-						});
-						listComponent.addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseReleased(MouseEvent e) {
-								selectedIndex = itFin;
-								updateListSelectedColor();
-								Thread t1 = new Thread(new Runnable()
-								{
-									public void run() {
-										constructInformationPanel();
-									}
-								});
-								t1.start();
-								
-								listComponent.setBackground(new Color(124, 153, 38, 255));
-							}
-						});
-						
-						JLabel bikeNameLabel = new JLabel("     "+bike.getBikeName());
-						JLabel bikeSerialLabel = new JLabel("     "+ bike.getSerialNumber());
-						JLabel bikeDateLabel = new JLabel("     "+ bike.getRegisterDate().getDayOfMonth() +"."+ bike.getRegisterDate().getMonthValue() +"."+ bike.getRegisterDate().getYear());
-						listComponent.add(bikeNameLabel);
-						listComponent.add(bikeSerialLabel);
-						listComponent.add(bikeDateLabel);
-						savedListComponents.add(listComponent);
-						
-						
-						for(Component c : listComponent.getComponents()) {
-							JLabel label = (JLabel) c;
-							label.setMaximumSize(new Dimension((int) Math.ceil(screenWidth * 0.31614/tableDivideNumber), Integer.MAX_VALUE));
-							label.setForeground(Color.WHITE);
-							label.setHorizontalAlignment(JLabel.LEFT);
-							label.setVerticalAlignment(JLabel.CENTER);
-							label.setFont(new Font("Arial", Font.PLAIN, (int) Math.round(15 * (screenWidth / 1920))));
-						}		
-					}
-					
-					bikeListPanel.add(listComponent);
-					bikeListPanel.add(Box.createRigidArea(new Dimension(0, (int) Math.ceil(screenHeight * 0.00462))));
-					it++;
-				}
-				bikeList.setViewportView(bikeListPanel);
-					
-				
+				selling(it, isFirst, tableDivideNumber);
 			break;
-			
-			
+					
 			case 3:
+				bikeHistory(it, isFirst, tableDivideNumber);
+				/*
 	        	try {
 	        		StatisticsCtr sCtr = new StatisticsCtr();
-	        		searchBikeArrayList = bikeArrayList = (ArrayList<Bike>) sCtr.getHistoryBikes();}
+	        		searchBikeArrayList = bikeArrayList = (ArrayList<Bike>) sCtr.findAllBikes();}
 	        	catch(DataAccessException e) {e.printStackTrace();}
 				//For each loop creates listComponents from bike list
 				for(Bike bike : searchBikeArrayList) {
@@ -610,7 +417,7 @@ public class BikeListUI extends GuiTools{
 				}
 				bikeList.setViewportView(bikeListPanel);
 					
-				
+				*/
 			break;
 			
 			default:
@@ -619,6 +426,204 @@ public class BikeListUI extends GuiTools{
 			
 		}	
 	
+	private void bikeHistory(int it, boolean isFirst, int tableDivideNumber) {
+		try {
+    		StatisticsCtr sCtr = new StatisticsCtr();
+    		searchBikeArrayList = bikeArrayList = (ArrayList<Bike>) sCtr.findAllBikes();}
+    	catch(DataAccessException e) {e.printStackTrace();}
+		//For each loop creates listComponents from bike list
+		for(int x = -1; x < searchBikeArrayList.size(); x++) {
+		//assigns number to every listComponent
+		final int itFin = it;
+		final JPanel listComponent = new JPanel();
+		bikeListPanel.setPreferredSize(new Dimension(0, searchBikeArrayList.size()*(int) Math.ceil(screenHeight * 0.028)));
+		
+		listComponent.setBackground(new Color(64, 64, 64, 255));
+		listComponent.setOpaque(true);
+		listComponent.setLayout(new BoxLayout(listComponent, BoxLayout.LINE_AXIS));
+		listComponent.setMaximumSize(new Dimension(Integer.MAX_VALUE, (int) Math.ceil(screenHeight * 0.028)));
+		
+			if(it==0) {
+				listComponent.setBackground(new Color(125, 184, 182, 255));
+				JLabel tableLabel1 = new JLabel("   Name");
+				JLabel tableLabel2 = new JLabel("   Serial Number");
+				JLabel tableLabel3 = new JLabel("   Registered Date");
+				listComponent.add(tableLabel1);
+				listComponent.add(tableLabel2);
+				listComponent.add(tableLabel3);
+				
+				//Sets divide number based on number of labels added to listComponent
+				for(Component c : listComponent.getComponents()) {tableDivideNumber++;}
+				
+				//Setting default values to every Label in ListComponent
+				for(Component c : listComponent.getComponents()) {
+					JLabel label = (JLabel) c;
+					label.setMaximumSize(new Dimension((int) Math.ceil(screenWidth * 0.31614/tableDivideNumber), Integer.MAX_VALUE));
+					label.setForeground(Color.WHITE);
+					label.setHorizontalAlignment(JLabel.LEFT);
+					label.setVerticalAlignment(JLabel.CENTER);
+					label.setFont(new Font("Arial", Font.PLAIN, (int) Math.round(15 * (screenWidth / 1920))));
+				}
+			}
+			
+			else {
+				listComponent.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						if(selectedIndex == itFin) {listComponent.setBackground(new Color(124, 153, 38, 255));}
+						else {listComponent.setBackground(new Color(107, 107, 107, 255));}
+					}
+				});
+				listComponent.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseExited(MouseEvent e) {
+						if(selectedIndex == itFin) {listComponent.setBackground(new Color(124, 153, 38, 255));}
+						else {listComponent.setBackground(new Color(64, 64, 64, 255));}
+					}
+				});
+				listComponent.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						selectedIndex = itFin;
+						updateListSelectedColor();
+						Thread t1 = new Thread(new Runnable()
+						{
+							public void run() {
+								constructInformationPanel();
+							}
+						});
+						t1.start();
+						
+						listComponent.setBackground(new Color(124, 153, 38, 255));
+					}
+				});
+				
+				JLabel bikeNameLabel = new JLabel("     "+searchBikeArrayList.get(x).getBikeName());
+				JLabel bikeSerialLabel = new JLabel("     "+ searchBikeArrayList.get(x).getSerialNumber());
+				JLabel bikeDateLabel = new JLabel("     "+ searchBikeArrayList.get(x).getRegisterDate().getDayOfMonth() +"."+ searchBikeArrayList.get(x).getRegisterDate().getMonthValue() +"."+ searchBikeArrayList.get(x).getRegisterDate().getYear());
+				listComponent.add(bikeNameLabel);
+				listComponent.add(bikeSerialLabel);
+				listComponent.add(bikeDateLabel);
+				savedListComponents.add(listComponent);
+				
+				
+				for(Component c : listComponent.getComponents()) {
+					JLabel label = (JLabel) c;
+					label.setMaximumSize(new Dimension((int) Math.ceil(screenWidth * 0.31614/tableDivideNumber), Integer.MAX_VALUE));
+					label.setForeground(Color.WHITE);
+					label.setHorizontalAlignment(JLabel.LEFT);
+					label.setVerticalAlignment(JLabel.CENTER);
+					label.setFont(new Font("Arial", Font.PLAIN, (int) Math.round(15 * (screenWidth / 1920))));
+				}		
+			}
+			
+			bikeListPanel.add(listComponent);
+			bikeListPanel.add(Box.createRigidArea(new Dimension(0, (int) Math.ceil(screenHeight * 0.00462))));
+			it++;
+		}
+		bikeList.setViewportView(bikeListPanel);
+		
+	}
+
+	private void selling(int it, boolean isFirst, int tableDivideNumber) {
+		try {
+    		StatisticsCtr sCtr = new StatisticsCtr();
+    		searchBikeArrayList = bikeArrayList = (ArrayList<Bike>) sCtr.getForSaleBikes();}
+    	catch(DataAccessException e) {e.printStackTrace();}
+		//For each loop creates listComponents from bike list
+		for(int x = -1; x<searchBikeArrayList.size(); x++) {
+		//assigns number to every listComponent
+		final int itFin = it;
+		final JPanel listComponent = new JPanel();
+		bikeListPanel.setPreferredSize(new Dimension(0, searchBikeArrayList.size()*(int) Math.ceil(screenHeight * 0.028)));
+		
+		listComponent.setBackground(new Color(64, 64, 64, 255));
+		listComponent.setOpaque(true);
+		listComponent.setLayout(new BoxLayout(listComponent, BoxLayout.LINE_AXIS));
+		listComponent.setMaximumSize(new Dimension(Integer.MAX_VALUE, (int) Math.ceil(screenHeight * 0.028)));
+		
+			if(it==0) {
+				listComponent.setBackground(new Color(125, 184, 182, 255));
+				JLabel tableLabel1 = new JLabel("   Name");
+				JLabel tableLabel2 = new JLabel("   Serial Number");
+				JLabel tableLabel3 = new JLabel("   Registered Date");
+				listComponent.add(tableLabel1);
+				listComponent.add(tableLabel2);
+				listComponent.add(tableLabel3);
+				
+				//Sets divide number based on number of labels added to listComponent
+				for(Component c : listComponent.getComponents()) {tableDivideNumber++;}
+				
+				//Setting default values to every Label in ListComponent
+				for(Component c : listComponent.getComponents()) {
+					JLabel label = (JLabel) c;
+					label.setMaximumSize(new Dimension((int) Math.ceil(screenWidth * 0.31614/tableDivideNumber), Integer.MAX_VALUE));
+					label.setForeground(Color.WHITE);
+					label.setHorizontalAlignment(JLabel.LEFT);
+					label.setVerticalAlignment(JLabel.CENTER);
+					label.setFont(new Font("Arial", Font.PLAIN, (int) Math.round(15 * (screenWidth / 1920))));
+				}
+			}
+			
+			else {
+				listComponent.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						if(selectedIndex == itFin) {listComponent.setBackground(new Color(124, 153, 38, 255));}
+						else {listComponent.setBackground(new Color(107, 107, 107, 255));}
+					}
+				});
+				listComponent.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseExited(MouseEvent e) {
+						if(selectedIndex == itFin) {listComponent.setBackground(new Color(124, 153, 38, 255));}
+						else {listComponent.setBackground(new Color(64, 64, 64, 255));}
+					}
+				});
+				listComponent.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						selectedIndex = itFin;
+						updateListSelectedColor();
+						Thread t1 = new Thread(new Runnable()
+						{
+							public void run() {
+								constructInformationPanel();
+							}
+						});
+						t1.start();
+						
+						listComponent.setBackground(new Color(124, 153, 38, 255));
+					}
+				});
+				
+				JLabel bikeNameLabel = new JLabel("     "+searchBikeArrayList.get(x).getBikeName());
+				JLabel bikeSerialLabel = new JLabel("     "+ searchBikeArrayList.get(x).getSerialNumber());
+				JLabel bikeDateLabel = new JLabel("     "+ searchBikeArrayList.get(x).getRegisterDate().getDayOfMonth() +"."+ searchBikeArrayList.get(x).getRegisterDate().getMonthValue() +"."+ searchBikeArrayList.get(x).getRegisterDate().getYear());
+				listComponent.add(bikeNameLabel);
+				listComponent.add(bikeSerialLabel);
+				listComponent.add(bikeDateLabel);
+				savedListComponents.add(listComponent);
+				
+				
+				for(Component c : listComponent.getComponents()) {
+					JLabel label = (JLabel) c;
+					label.setMaximumSize(new Dimension((int) Math.ceil(screenWidth * 0.31614/tableDivideNumber), Integer.MAX_VALUE));
+					label.setForeground(Color.WHITE);
+					label.setHorizontalAlignment(JLabel.LEFT);
+					label.setVerticalAlignment(JLabel.CENTER);
+					label.setFont(new Font("Arial", Font.PLAIN, (int) Math.round(15 * (screenWidth / 1920))));
+				}		
+			}
+			
+			bikeListPanel.add(listComponent);
+			bikeListPanel.add(Box.createRigidArea(new Dimension(0, (int) Math.ceil(screenHeight * 0.00462))));
+			it++;
+		}
+		bikeList.setViewportView(bikeListPanel);
+		
+	}
+
 	//When clicked on list component it sets every component color to default
 		private void updateListSelectedColor() {
 			for(JPanel i : savedListComponents) {
@@ -836,5 +841,101 @@ public class BikeListUI extends GuiTools{
 		
 		
 		
+	}
+	
+	private void workingOn(int it, boolean isFirst, int tableDivideNumber) {
+		try {
+    		//lin
+    		StatisticsCtr sCtr = new StatisticsCtr();
+    		searchBikeArrayList = bikeArrayList = (ArrayList<Bike>) sCtr.getUnfinishedBikes();}
+    	catch(DataAccessException e) {e.printStackTrace();}
+		//For each loop creates listComponents from bike list
+		for(int x = -1; x<searchBikeArrayList.size(); x++) {
+			//assigns number to every listComponent
+			final int itFin = it;
+			final JPanel listComponent = new JPanel();
+			bikeListPanel.setPreferredSize(new Dimension(0, searchBikeArrayList.size()*(int) Math.ceil(screenHeight * 0.028)));
+			
+			listComponent.setBackground(new Color(64, 64, 64, 255));
+			listComponent.setOpaque(true);
+			listComponent.setLayout(new BoxLayout(listComponent, BoxLayout.LINE_AXIS));
+			listComponent.setMaximumSize(new Dimension(Integer.MAX_VALUE, (int) Math.ceil(screenHeight * 0.028)));	
+				if(it == 0) {					
+					listComponent.setBackground(new Color(125, 184, 182, 255));
+					JLabel tableLabel1 = new JLabel("   Name");
+					JLabel tableLabel2 = new JLabel("   Serial Number");
+					JLabel tableLabel3 = new JLabel("   Registered Date");
+					listComponent.add(tableLabel1);
+					listComponent.add(tableLabel2);
+					listComponent.add(tableLabel3);
+					
+					//Sets divide number based on number of labels added to listComponent
+					for(Component c : listComponent.getComponents()) {tableDivideNumber++;}
+					
+					//Setting default values to every Label in ListComponent
+					for(Component c : listComponent.getComponents()) {
+						JLabel label = (JLabel) c;
+						label.setMaximumSize(new Dimension((int) Math.ceil(screenWidth * 0.31614/tableDivideNumber), Integer.MAX_VALUE));
+						label.setForeground(Color.WHITE);
+						label.setHorizontalAlignment(JLabel.LEFT);
+						label.setVerticalAlignment(JLabel.CENTER);
+						label.setFont(new Font("Arial", Font.PLAIN, (int) Math.round(15 * (screenWidth / 1920))));
+					}										
+				} else {	
+					listComponent.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseEntered(MouseEvent e) {
+							if(selectedIndex == itFin) {listComponent.setBackground(new Color(124, 153, 38, 255));}
+							else {listComponent.setBackground(new Color(107, 107, 107, 255));}
+						}
+					});
+					listComponent.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseExited(MouseEvent e) {
+							if(selectedIndex == itFin) {listComponent.setBackground(new Color(124, 153, 38, 255));}
+							else {listComponent.setBackground(new Color(64, 64, 64, 255));}
+						}
+					});
+					listComponent.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseReleased(MouseEvent e) {
+							selectedIndex = itFin;
+							updateListSelectedColor();
+							Thread t1 = new Thread(new Runnable()
+							{
+								public void run() {
+									constructInformationPanel();
+								}
+							});
+							t1.start();
+							
+							listComponent.setBackground(new Color(124, 153, 38, 255));
+						}
+					});
+					
+					JLabel bikeNameLabel = new JLabel("     "+searchBikeArrayList.get(x).getBikeName());
+					JLabel bikeSerialLabel = new JLabel("     "+ searchBikeArrayList.get(x).getSerialNumber());
+					JLabel bikeDateLabel = new JLabel("     "+ searchBikeArrayList.get(x).getRegisterDate().getDayOfMonth() +"."+ searchBikeArrayList.get(x).getRegisterDate().getMonthValue() +"."+ searchBikeArrayList.get(x).getRegisterDate().getYear());
+					listComponent.add(bikeNameLabel);
+					listComponent.add(bikeSerialLabel);
+					listComponent.add(bikeDateLabel);
+					savedListComponents.add(listComponent);
+					
+					
+					for(Component c : listComponent.getComponents()) {
+						JLabel label = (JLabel) c;
+						label.setMaximumSize(new Dimension((int) Math.ceil(screenWidth * 0.31614/tableDivideNumber), Integer.MAX_VALUE));
+						label.setForeground(Color.WHITE);
+						label.setHorizontalAlignment(JLabel.LEFT);
+						label.setVerticalAlignment(JLabel.CENTER);
+						label.setFont(new Font("Arial", Font.PLAIN, (int) Math.round(15 * (screenWidth / 1920))));
+					}
+					
+				}
+				it++;
+				bikeListPanel.add(listComponent);
+				bikeListPanel.add(Box.createRigidArea(new Dimension(0, (int) Math.ceil(screenHeight * 0.00462))));
+			}
+		bikeList.setViewportView(bikeListPanel);
 	}
 }
