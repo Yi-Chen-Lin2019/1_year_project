@@ -105,7 +105,7 @@ public class BikeListUI extends GuiTools{
         
         switch(listType) {
         case 1: 
-        	middleButtonText = "Sale";
+        	middleButtonText = "Sell";
         	constructBikeListPanel();
         	break;
         	
@@ -167,7 +167,7 @@ public class BikeListUI extends GuiTools{
 							{
 								public void run() {
 									try {
-										Bike selectedBike = bikeCtr.findBikeByID(searchBikeArrayList.get(selectedIndex).getId());
+										Bike selectedBike = bikeCtr.findBikeByID(searchBikeArrayList.get(selectedIndex-1).getId());
 										Object[] options = {"English", "Danish"};
 										int x = JOptionPane.showOptionDialog(null,"Choose a language for checklist: ",
 								                "Click a button",
@@ -198,7 +198,7 @@ public class BikeListUI extends GuiTools{
 						Thread t1 = new Thread(new Runnable()
 							{
 								public void run() {
-									try{markForSale(bikeCtr.findBikeByID(searchBikeArrayList.get(selectedIndex).getId()));}
+									try{markForSale(bikeCtr.findBikeByID(searchBikeArrayList.get(selectedIndex-1).getId()));}
 									catch(DataAccessException a) {a.printStackTrace();}
 								}
 						});
@@ -222,7 +222,7 @@ public class BikeListUI extends GuiTools{
 						{
 							public void run() {
 								try {
-									Bike selectedBike = bikeCtr.findBikeByID(searchBikeArrayList.get(selectedIndex).getId());
+									Bike selectedBike = bikeCtr.findBikeByID(searchBikeArrayList.get(selectedIndex-1).getId());
 									bikeCtr.deleteBike(selectedBike);
 									
 									constructBikeListPanel();
@@ -320,104 +320,6 @@ public class BikeListUI extends GuiTools{
 					
 			case 3:
 				bikeHistory(it, isFirst, tableDivideNumber);
-				/*
-	        	try {
-	        		StatisticsCtr sCtr = new StatisticsCtr();
-	        		searchBikeArrayList = bikeArrayList = (ArrayList<Bike>) sCtr.findAllBikes();}
-	        	catch(DataAccessException e) {e.printStackTrace();}
-				//For each loop creates listComponents from bike list
-				for(Bike bike : searchBikeArrayList) {
-				//assigns number to every listComponent
-				final int itFin = it;
-				final JPanel listComponent = new JPanel();
-				bikeListPanel.setPreferredSize(new Dimension(0, searchBikeArrayList.size()*(int) Math.ceil(screenHeight * 0.028)));
-				
-				listComponent.setBackground(new Color(64, 64, 64, 255));
-				listComponent.setOpaque(true);
-				listComponent.setLayout(new BoxLayout(listComponent, BoxLayout.LINE_AXIS));
-				listComponent.setMaximumSize(new Dimension(Integer.MAX_VALUE, (int) Math.ceil(screenHeight * 0.028)));
-				
-					if(it==0) {
-						listComponent.setBackground(new Color(125, 184, 182, 255));
-						JLabel tableLabel1 = new JLabel("   Name");
-						JLabel tableLabel2 = new JLabel("   Serial Number");
-						JLabel tableLabel3 = new JLabel("   Registered Date");
-						listComponent.add(tableLabel1);
-						listComponent.add(tableLabel2);
-						listComponent.add(tableLabel3);
-						
-						//Sets divide number based on number of labels added to listComponent
-						for(Component c : listComponent.getComponents()) {tableDivideNumber++;}
-						
-						//Setting default values to every Label in ListComponent
-						for(Component c : listComponent.getComponents()) {
-							JLabel label = (JLabel) c;
-							label.setMaximumSize(new Dimension((int) Math.ceil(screenWidth * 0.31614/tableDivideNumber), Integer.MAX_VALUE));
-							label.setForeground(Color.WHITE);
-							label.setHorizontalAlignment(JLabel.LEFT);
-							label.setVerticalAlignment(JLabel.CENTER);
-							label.setFont(new Font("Arial", Font.PLAIN, (int) Math.round(15 * (screenWidth / 1920))));
-						}
-					}
-					
-					else {
-						listComponent.addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseEntered(MouseEvent e) {
-								if(selectedIndex == itFin) {listComponent.setBackground(new Color(124, 153, 38, 255));}
-								else {listComponent.setBackground(new Color(107, 107, 107, 255));}
-							}
-						});
-						listComponent.addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseExited(MouseEvent e) {
-								if(selectedIndex == itFin) {listComponent.setBackground(new Color(124, 153, 38, 255));}
-								else {listComponent.setBackground(new Color(64, 64, 64, 255));}
-							}
-						});
-						listComponent.addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseReleased(MouseEvent e) {
-								selectedIndex = itFin;
-								updateListSelectedColor();
-								Thread t1 = new Thread(new Runnable()
-								{
-									public void run() {
-										constructInformationPanel();
-									}
-								});
-								t1.start();
-								
-								listComponent.setBackground(new Color(124, 153, 38, 255));
-							}
-						});
-						
-						JLabel bikeNameLabel = new JLabel("     "+bike.getBikeName());
-						JLabel bikeSerialLabel = new JLabel("     "+ bike.getSerialNumber());
-						JLabel bikeDateLabel = new JLabel("     "+ bike.getRegisterDate().getDayOfMonth() +"."+ bike.getRegisterDate().getMonthValue() +"."+ bike.getRegisterDate().getYear());
-						listComponent.add(bikeNameLabel);
-						listComponent.add(bikeSerialLabel);
-						listComponent.add(bikeDateLabel);
-						savedListComponents.add(listComponent);
-						
-						
-						for(Component c : listComponent.getComponents()) {
-							JLabel label = (JLabel) c;
-							label.setMaximumSize(new Dimension((int) Math.ceil(screenWidth * 0.31614/tableDivideNumber), Integer.MAX_VALUE));
-							label.setForeground(Color.WHITE);
-							label.setHorizontalAlignment(JLabel.LEFT);
-							label.setVerticalAlignment(JLabel.CENTER);
-							label.setFont(new Font("Arial", Font.PLAIN, (int) Math.round(15 * (screenWidth / 1920))));
-						}		
-					}
-					
-					bikeListPanel.add(listComponent);
-					bikeListPanel.add(Box.createRigidArea(new Dimension(0, (int) Math.ceil(screenHeight * 0.00462))));
-					it++;
-				}
-				bikeList.setViewportView(bikeListPanel);
-					
-				*/
 			break;
 			
 			default:
@@ -648,7 +550,7 @@ public class BikeListUI extends GuiTools{
 	private void constructInformationPanel() {
 		bikeInformationPanel.removeAll();
 		if(selectedIndex!=-1) {
-			Bike selectedBike = searchBikeArrayList.get(selectedIndex);
+			Bike selectedBike = searchBikeArrayList.get(selectedIndex-1);
 
 			//iterator, counts number of forEach loop
 			
@@ -711,7 +613,7 @@ public class BikeListUI extends GuiTools{
 				{
 					public void run() {
 						try {
-							Bike fullBike = bikeCtr.findBikeByID(searchBikeArrayList.get(selectedIndex).getId());
+							Bike fullBike = bikeCtr.findBikeByID(searchBikeArrayList.get(selectedIndex-1).getId());
 							noteTextField.setText(fullBike.getRepairList().getNote());
 						} catch (DataAccessException e) {}
 						
