@@ -2,7 +2,9 @@
 Before you run the program, remember to change the dbName, serverAddress, userName and password in DBConnection class. (db > DBConnection)
 
 Domain model 
+
 ![image](https://github.com/Yi-Chen-Lin2019/1_year_project/blob/master/Domain_model.png)
+
 Here we elaborate the domain model by introducing the patterns we have used: 
 Composite aggregation:  
 Bike-RepairList, RepairList-Repair  
