@@ -33,7 +33,7 @@ Our client decides the price depending on the condition of the bike and add the 
 
 **Relational model**
 
-
+![image](https://github.com/Yi-Chen-Lin2019/1_year_project/blob/master/Relational%20Model%20Diagram%20Cykel20_COLORIZED.png)
 
 1NF:  
 The domain of each attribute must only contain atomic values. Every table in our relational model follow it. And multi-values and repeating groups do not occur.  
