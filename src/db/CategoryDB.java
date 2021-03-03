@@ -17,10 +17,11 @@ public class CategoryDB implements CategoryDBIF {
 	private Connection connection;
 	private static String FIND_ALL_Q = "Select CategoryId, CategoryName, Color from Category where isDisabled = 0";
 	private static String FIND_BY_ID_Q = "Select CategoryId, CategoryName, Color from Category where CategoryId = ? and IsDisabled = 0";
+	private static String FIND_BY_ID_Repair = "Select CategoryId, CategoryName, Color from Category where CategoryId = ?";
 	private static String INSERT_Q = "INSERT INTO Category (CategoryName, Color) values (?, ?)";
 	private static String UPDATE_Q = "Update Category SET CategoryName = ?, Color = ? WHERE CategoryId = ?";
 	private static String DELETE_Q = "Update Category SET IsDisabled = 1 WHERE CategoryId = ?";
-
+	private PreparedStatement findAllForRepair;
 	private PreparedStatement findAll;
 	private PreparedStatement findById;
 	private PreparedStatement insertPS;
@@ -41,6 +42,7 @@ public class CategoryDB implements CategoryDBIF {
 			connection = DBConnection.getInstance().getConnection();
 			findAll = connection.prepareStatement(FIND_ALL_Q);
 			findById = connection.prepareStatement(FIND_BY_ID_Q);
+			findByIdRepair = connection.prepareStatement(FIND_BY_ID_Repair);
 			insertPS = connection.prepareStatement(INSERT_Q, Statement.RETURN_GENERATED_KEYS);
 			updatePS = connection.prepareStatement(UPDATE_Q);
 			deletePS = connection.prepareStatement(DELETE_Q);
@@ -48,6 +50,22 @@ public class CategoryDB implements CategoryDBIF {
 			// e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_PREPARE_STATEMENT, e);
 		}
+	}
+	
+	@Override
+	public Category findByIdRepair(int id) throws DataAccessException {
+		Category res = null;
+		try {
+			findByIdRepair.setInt(1, id);
+			ResultSet rs = findByIdRepair.executeQuery();
+			if (rs.next()) {
+				res = buildObject(rs);
+			}
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new DataAccessException(DBMessages.COULD_NOT_BIND_OR_EXECUTE_QUERY, e);
+		}
+		return res;
 	}
 	
 	@Override

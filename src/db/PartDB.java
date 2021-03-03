@@ -150,7 +150,7 @@ public class PartDB implements PartDBIF {
 			res.setName(rs.getString("PartName"));
 			res.setUsedPrice(rs.getDouble("UsedPrice"));
 			res.setNewPrice(rs.getDouble("NewPrice"));
-			res.setCategory(new CategoryDB().findById(rs.getInt("CategoryId")));
+			res.setCategory(new CategoryDB().findByIdRepair(rs.getInt("CategoryId")));
 //			res.setCategory(new CategoryDB().buildObject(rs));
 			res.setIsAvailable(rs.getBoolean("isAvailable"));
 

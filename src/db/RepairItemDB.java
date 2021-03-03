@@ -155,7 +155,7 @@ public class RepairItemDB implements RepairItemDBIF {
 		RepairItem res = new RepairItem();
 		try {
 			CategoryDB categoryDB = new CategoryDB();
-			res.setCategory(categoryDB.findById(rs.getInt("CategoryId")));
+			res.setCategory(categoryDB.findByIdRepair(rs.getInt("CategoryId")));
 			res.setName(rs.getString("RepairItemName"));
 			res.setDanish(rs.getString("RepairItemDanish"));
 			res.setRepairItemId(rs.getInt("RepairItemId"));
