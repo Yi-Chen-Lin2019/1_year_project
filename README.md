@@ -1,6 +1,9 @@
 # 1_year_project
 Before you run the program, remember to change the dbName, serverAddress, userName and password in DBConnection class. (db > DBConnection)
 
+## Introduction
+Our goal was to provide a working solution for a data exchange between two company units as well to store every information about each bike and make it easily accessible. 
+
 **Domain model**
 
 ![image](https://github.com/Yi-Chen-Lin2019/1_year_project/blob/master/Domain_model.png)
